@@ -1,0 +1,3 @@
+django-pure-paginator
+=====================
+
