@@ -1,4 +1,14 @@
 from math import ceil
+import functools
+
+from django.conf import settings
+
+PAGINATION_SETTINGS = {
+    'PAGE_RANGE': 10,
+    'NUM_PAGES_OUTSIDE_RANGE': 2,
+}
+if hasattr(settings, 'PAGINATION_SETTINGS'):
+    PAGINATOION_SETTINGS.update(settings.PAGINATION_SETTINGS)
 
 class InvalidPage(Exception):
     pass
@@ -10,12 +20,13 @@ class EmptyPage(InvalidPage):
     pass
 
 class Paginator(object):
-    def __init__(self, object_list, per_page, orphans=0, allow_empty_first_page=True):
+    def __init__(self, object_list, per_page, orphans=0, allow_empty_first_page=True, request=None):
         self.object_list = object_list
         self.per_page = per_page
         self.orphans = orphans
         self.allow_empty_first_page = allow_empty_first_page
         self._num_pages = self._count = None
+        self.request = request
 
     def validate_number(self, number):
         "Validates the given 1-based page number."
@@ -75,11 +86,31 @@ class Paginator(object):
 
 QuerySetPaginator = Paginator # For backwards-compatibility.
 
+class PageRepresentation(int):
+    def __init__(self, number, querystring):
+        int.__init__(self, number)
+        self.querystring = kwargs['querystring']
+
+
+def add_page_querystring(func):
+    @functools.wraps
+    def wrapper(self, *args, **kwargs):
+        integer = func(self, *args, **kwargs)
+        querystring = self._other_page_querystring(integer)
+        return PageRepresentation(integer, querystring)
+
+    return wrapper
+
 class Page(object):
     def __init__(self, object_list, number, paginator):
         self.object_list = object_list
-        self.number = number
+        self.number = PageRepresentation(number, self._other_page_querystring(number))
         self.paginator = paginator
+        if paginator.request:
+            # Reason: I just want to perform this operation once, and not once per page
+            self.base_queryset = self.paginator.request.GET.copy()
+            self.base_queryset['page'] = 'page'
+            self.base_queryset = self.base_queryset.urlencode().replace('page=page', 'page=%s')
 
     def __repr__(self):
         return '<Page %s of %s>' % (self.number, self.paginator.num_pages)
@@ -93,12 +124,15 @@ class Page(object):
     def has_other_pages(self):
         return self.has_previous() or self.has_next()
 
+    @add_page_querystring
     def next_page_number(self):
         return self.number + 1
 
+    @add_page_querystring
     def previous_page_number(self):
         return self.number - 1
 
+    @add_page_querystring
     def start_index(self):
         """
         Returns the 1-based index of the first object on this page,
@@ -109,6 +143,7 @@ class Page(object):
             return 0
         return (self.paginator.per_page * (self.number - 1)) + 1
 
+    @add_page_querystring
     def end_index(self):
         """
         Returns the 1-based index of the last object on this page,
@@ -118,3 +153,14 @@ class Page(object):
         if self.number == self.paginator.num_pages:
             return self.paginator.count
         return self.number * self.paginator.per_page
+
+    def _other_page_querystring(self, page_number):
+        """
+        Returns a query string for the given page, preserving any
+        GET parameters present.
+        """
+        if self.paginator.request:
+            return self.base_queryset %page_number
+
+        raise Warning("You must supply Paginator() with the request object for a proper querystring.")
+        return 'page=%s' %pade_number

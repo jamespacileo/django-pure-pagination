@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="37d115e9-12e5-451c-8fdf-810cb92b039c" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/purepagination/paginator.py" afterPath="$PROJECT_DIR$/purepagination/paginator.py" />
     </list>
     <ignored path="django-pure-pagination.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -25,19 +27,19 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="paginator.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="paginator.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/purepagination/paginator.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="10" column="0" selection-start="149" selection-end="149" vertical-scroll-proportion="0.19450802">
+            <state line="151" column="54" selection-start="5074" selection-end="5074" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name=".gitignore" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name=".gitignore" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="1" column="5" selection-start="11" selection-end="11" vertical-scroll-proportion="0.0">
+            <state line="2" column="7" selection-start="19" selection-end="19" vertical-scroll-proportion="0.0389016">
               <folding />
             </state>
           </provider>
@@ -57,6 +59,7 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
+        <option value="$PROJECT_DIR$/purepagination/paginator.py" />
         <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
@@ -190,7 +193,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -243,16 +246,16 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/.gitignore">
+    <entry file="file://$PROJECT_DIR$/purepagination/paginator.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="5" selection-start="11" selection-end="11" vertical-scroll-proportion="0.0">
+        <state line="151" column="54" selection-start="5074" selection-end="5074" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/purepagination/paginator.py">
+    <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="0" selection-start="149" selection-end="149" vertical-scroll-proportion="0.19450802">
+        <state line="2" column="7" selection-start="19" selection-end="19" vertical-scroll-proportion="0.0389016">
           <folding />
         </state>
       </provider>
