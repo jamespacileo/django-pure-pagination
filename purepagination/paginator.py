@@ -4,7 +4,7 @@ import functools
 from django.conf import settings
 
 PAGINATION_SETTINGS = {
-    'PAGE_RANGE': 10,
+    'PAGE_RANGE_DISPLAYED': 10,
     'NUM_PAGES_OUTSIDE_RANGE': 2,
 }
 if hasattr(settings, 'PAGINATION_SETTINGS'):
@@ -95,22 +95,34 @@ class PageRepresentation(int):
 def add_page_querystring(func):
     @functools.wraps
     def wrapper(self, *args, **kwargs):
-        integer = func(self, *args, **kwargs)
-        querystring = self._other_page_querystring(integer)
-        return PageRepresentation(integer, querystring)
-
+        result = func(self, *args, **kwargs)
+        if isinstance(result, int):
+            querystring = self._other_page_querystring(integer)
+            return PageRepresentation(integer, querystring)
+        elif isinstance(result, list):
+            new_result = []
+            for number in result:
+                if isinstance(number, int):
+                    querystring = self._other_page_querystring(integer)
+                    new_result.append(PageRepresentation(integer, querystring))
+                else:
+                    new_result.append(number)
+            return new_result
+        return result
+        
     return wrapper
 
 class Page(object):
     def __init__(self, object_list, number, paginator):
         self.object_list = object_list
-        self.number = PageRepresentation(number, self._other_page_querystring(number))
         self.paginator = paginator
         if paginator.request:
             # Reason: I just want to perform this operation once, and not once per page
             self.base_queryset = self.paginator.request.GET.copy()
             self.base_queryset['page'] = 'page'
             self.base_queryset = self.base_queryset.urlencode().replace('page=page', 'page=%s')
+            
+        self.number = PageRepresentation(number, self._other_page_querystring(number))
 
     def __repr__(self):
         return '<Page %s of %s>' % (self.number, self.paginator.num_pages)
@@ -132,7 +144,6 @@ class Page(object):
     def previous_page_number(self):
         return self.number - 1
 
-    @add_page_querystring
     def start_index(self):
         """
         Returns the 1-based index of the first object on this page,
@@ -143,7 +154,6 @@ class Page(object):
             return 0
         return (self.paginator.per_page * (self.number - 1)) + 1
 
-    @add_page_querystring
     def end_index(self):
         """
         Returns the 1-based index of the last object on this page,
@@ -153,6 +163,31 @@ class Page(object):
         if self.number == self.paginator.num_pages:
             return self.paginator.count
         return self.number * self.paginator.per_page
+
+    @add_page_querystring
+    def pages(self):
+        if self.paginator.num_pages <= PAGINATION_SETTINGS['PAGE_RANGE_DISPLAYED']:
+            return range(self.paginator.num_pages)
+        result = []
+        if self.number > self.paginator.num_pages - PAGINATION_SETTINGS['PAGE_RANGE_DISPLAYED']/2:
+            right_side = self.paginator.num_pages - self.number
+            left_side = PAGINATION_SETTINGS['PAGE_RANGE_DISPLAYED'] - right_side
+        elif self.number < PAGINATION_SETTINGS['PAGE_RANGE_DISPLAYED']/2:
+            left_side = self.number
+            right_side = PAGINATION_SETTINGS['PAGE_RANGE_DISPLAYED'] - left_side
+        for page in xrange(1, self.paginator.numpages+1):
+            if page <= PAGINATION_SETTINGS['NUM_PAGES_OUTSIDE_RANGE']:
+                result.append(page)
+                continue
+            if page >= self.paginator.num_pages - PAGINATION_SETTINGS['NUM_PAGES_OUTSIDE_RANGE']:
+                result.append(page)
+                continue
+            if (page >= self.number - left_side) and (page <= self.number + right_side):
+                result.append(page)
+                continue
+            result.append('...')
+
+        return result
 
     def _other_page_querystring(self, page_number):
         """
