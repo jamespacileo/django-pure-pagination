@@ -19,7 +19,7 @@ Add `purepagination` to INSTALLED_APPS
         'pure_pagination',
     )
 
-Finally substitute **from django.core.paginator import Paginator** with **from pure_pagination.pagination import Paginator**
+Finally substitute **from django.core.paginator import Paginator** with **from pure_pagination import Paginator**
 
 Settings
 --------
@@ -42,12 +42,14 @@ Usage example
 
 Following is a simple example
 
+view file: **views.py**
+
 ::
 
     # views.py
     from django.shortcuts import render_to_response
 
-    from pure_pagination.pagination import Paginator, EmptyPage, PageNotAnInteger
+    from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 
 
     def index(request):
@@ -68,6 +70,7 @@ Following is a simple example
         }
 
 
+template file: **index.html**
 
 ::
 
