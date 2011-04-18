@@ -3,8 +3,9 @@ from operator import attrgetter
 
 from pure_pagination import Paginator, InvalidPage, EmptyPage
 from django.test import TestCase
+from django.test.client import Client
 
-from django import models
+from django.db import models
 
 class Article(models.Model):
     headline = models.CharField(max_length=100, default='Default headline')
@@ -136,3 +137,4 @@ class PaginationTests(TestCase):
         self.assertEqual(42, paginator.count)
         self.assertEqual(5, paginator.num_pages)
         self.assertEqual([1, 2, 3, 4, 5], paginator.page_range)
+    
