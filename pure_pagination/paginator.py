@@ -1,6 +1,8 @@
 from math import ceil
 import functools
 
+from django.template.loader import render_to_string
+
 from django.conf import settings
 
 PAGINATION_SETTINGS = {
@@ -9,6 +11,8 @@ PAGINATION_SETTINGS = {
 }
 if hasattr(settings, 'PAGINATION_SETTINGS'):
     PAGINATOION_SETTINGS.update(settings.PAGINATION_SETTINGS)
+
+#PAGINATION_SETTINGS['PAGE_RANGE_DISPLAYED'] -= 1
 
 class InvalidPage(Exception):
     pass
@@ -87,24 +91,25 @@ class Paginator(object):
 QuerySetPaginator = Paginator # For backwards-compatibility.
 
 class PageRepresentation(int):
-    def __init__(self, number, querystring):
-        int.__init__(self, number)
-        self.querystring = kwargs['querystring']
+    def __new__(cls, x, querystring):
+        obj = int.__new__(cls, x)
+        obj.querystring = querystring
+        return obj
 
 
 def add_page_querystring(func):
-    @functools.wraps
+    @functools.wraps(func)
     def wrapper(self, *args, **kwargs):
         result = func(self, *args, **kwargs)
         if isinstance(result, int):
-            querystring = self._other_page_querystring(integer)
-            return PageRepresentation(integer, querystring)
+            querystring = self._other_page_querystring(result)
+            return PageRepresentation(result, querystring)
         elif isinstance(result, list):
             new_result = []
             for number in result:
                 if isinstance(number, int):
-                    querystring = self._other_page_querystring(integer)
-                    new_result.append(PageRepresentation(integer, querystring))
+                    querystring = self._other_page_querystring(number)
+                    new_result.append(PageRepresentation(number, querystring))
                 else:
                     new_result.append(number)
             return new_result
@@ -167,15 +172,17 @@ class Page(object):
     @add_page_querystring
     def pages(self):
         if self.paginator.num_pages <= PAGINATION_SETTINGS['PAGE_RANGE_DISPLAYED']:
-            return range(self.paginator.num_pages)
+            return range(1, self.paginator.num_pages+1)
         result = []
+        left_side = PAGINATION_SETTINGS['PAGE_RANGE_DISPLAYED']/2
+        right_side = PAGINATION_SETTINGS['PAGE_RANGE_DISPLAYED'] - left_side
         if self.number > self.paginator.num_pages - PAGINATION_SETTINGS['PAGE_RANGE_DISPLAYED']/2:
             right_side = self.paginator.num_pages - self.number
             left_side = PAGINATION_SETTINGS['PAGE_RANGE_DISPLAYED'] - right_side
         elif self.number < PAGINATION_SETTINGS['PAGE_RANGE_DISPLAYED']/2:
             left_side = self.number
             right_side = PAGINATION_SETTINGS['PAGE_RANGE_DISPLAYED'] - left_side
-        for page in xrange(1, self.paginator.numpages+1):
+        for page in xrange(1, self.paginator.num_pages+1):
             if page <= PAGINATION_SETTINGS['NUM_PAGES_OUTSIDE_RANGE']:
                 result.append(page)
                 continue
@@ -185,7 +192,8 @@ class Page(object):
             if (page >= self.number - left_side) and (page <= self.number + right_side):
                 result.append(page)
                 continue
-            result.append('...')
+            if result[-1]:
+                result.append(None)
 
         return result
 
@@ -197,5 +205,9 @@ class Page(object):
         if self.paginator.request:
             return self.base_queryset %page_number
 
-        raise Warning("You must supply Paginator() with the request object for a proper querystring.")
-        return 'page=%s' %pade_number
+        #raise Warning("You must supply Paginator() with the request object for a proper querystring.")
+        return 'page=%s' %page_number
+
+    def render(self):
+        return render_to_string('pure_pagination/pagination.html', {'current_page':self})
+        

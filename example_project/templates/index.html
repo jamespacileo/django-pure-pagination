@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Test page</title>
+
+    <style type="text/css">
+        body{
+            font-family: Arial;
+            font-size: 12px;
+        }
+        .name-box{
+            padding: 10px;
+            font-size: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .spacer{
+            clear:both;
+            height: 10px;
+        }
+
+        .page, .prev, .next{
+            display: inline-block;
+            padding: 3px 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #333;
+        }
+        .page.current{
+            background: #333;
+            color: orange;
+        }
+        .page.disabled, .prev.disabled, .next.disabled{
+            color: #ddd;
+            cursor: default;
+        }
+
+        form{
+            padding: 10px 5px;
+            border: 1px solid #ddd;
+        }
+        form div{
+            padding: 5px;
+        }
+        form label{
+            width: 133px;
+            display: inline-block;
+        }
+        form input[type="submit"]{
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+    </style>
+
+</head>
+<body>
+
+<form action="" emthod="GET">
+
+    <div>
+        <label for="how_many_names">How many names?</label>
+        <input type="text" name="how_many_names" value="60">
+    </div>
+
+    <div>
+        <label for="how_many_names">Items per page?</label>
+        <input type="text" name="page_size" value="10">
+    </div>
+
+    <input type="submit">
+
+</form><div class="spacer"></div>
+
+{% for name in page.object_list %}
+
+<div class="name-box">
+
+    Name: {{ name }}
+
+</div><div class="spacer"></div>
+
+{% endfor %}
+
+{{ page.render }}
+
+</body>
+</html>

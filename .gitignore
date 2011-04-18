@@ -2,3 +2,4 @@
 *.pyo
 .idea**
 local**
+build**
