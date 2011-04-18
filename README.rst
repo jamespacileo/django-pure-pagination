@@ -1,9 +1,10 @@
 django-pure-pagination
 ======================
 
-This django app is meant to pagination capabilities without enforcing code changes within a Django app.
+The django app offers advanced pagination features without forcing major code changes within an existing project.
 
-The app is based upon the Django core pagination module.
+Django-pure-pagination is based upon Django's core pagination module and is therefore compatible with the existing api.
+
 
 Installation
 ------------
@@ -19,12 +20,28 @@ Add `purepagination` to INSTALLED_APPS
 
 Substitute `from django.core.paginator import Paginator` with `from purepagination.pagination import Paginator`
 
+Settings
+--------
+
+A few settings can be set within settings.py
+
+::
+
+    PAGINATION_SETTINGS = {
+        'PAGE_RANGE_DISPLAYED': 10,
+        'NUM_PAGES_OUTSIDE_RANGE': 2,
+    }
+
+PAGE_RANGE_DISPLAYED is the number of pages neighbouring the current page which will be displayed (default is 10)
+
+NUM_PAGES_OUTSIDE_RANGE is the number of pages neighbouring the first and last page which will be displayed (default is 2)
+
 Usage
 -----
 
 There a few different way you can make use of the features introduced within django-pure-pagination.
 
-Easiest way to render the pagination is to call the render method i.e. `{{ page.render }}`
+Easiest way to render the pagination is to call the render method i.e. **{{ page.render }}**
 
 Alternatively you can access the Page object low level methods yourself
 
