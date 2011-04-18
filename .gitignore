@@ -3,3 +3,5 @@
 .idea**
 local**
 build**
+*.egg-info**
+dist**
