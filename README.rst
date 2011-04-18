@@ -5,6 +5,7 @@ The django app offers advanced pagination features without forcing major code ch
 
 Django-pure-pagination is based upon Django's core pagination module and is therefore compatible with the existing api.
 
+`Documentation for Django core pagination module <http://docs.djangoproject.com/en/dev/topics/pagination/>`_
 
 Installation
 ------------
@@ -32,9 +33,62 @@ A few settings can be set within settings.py
         'NUM_PAGES_OUTSIDE_RANGE': 2,
     }
 
-PAGE_RANGE_DISPLAYED is the number of pages neighbouring the current page which will be displayed (default is 10)
+**PAGE_RANGE_DISPLAYED** is the number of pages neighbouring the current page which will be displayed (default is 10)
 
-NUM_PAGES_OUTSIDE_RANGE is the number of pages neighbouring the first and last page which will be displayed (default is 2)
+**NUM_PAGES_OUTSIDE_RANGE** is the number of pages neighbouring the first and last page which will be displayed (default is 2)
+
+Usage example
+-------------
+
+Following is a simple example
+
+::
+
+    # views.py
+    from django.shortcuts import render_to_response
+
+    from pure_pagination.pagination import Paginator, EmptyPage, PageNotAnInteger
+
+
+    def index(request):
+
+        try:
+            page = request.GET.get('page', 1)
+        except PageNotAnInteger:
+            page = 1
+
+        objects = ['john', 'edward', 'josh', 'frank']
+
+        # Provide Paginator with the request object for complete querystring generation
+        p = Paginator(objects, request=request)
+        people = p.page(page)
+
+        return render_to_response('index.html', {
+            'people': people,
+        }
+
+
+
+::
+
+    {# index.html #}
+    {% extends 'base.html' %}
+
+    {% block content %}
+
+    {% for person in people.object_list %}
+        <div>
+            First name: {{ person }}
+        </div>
+    {% endfor %}
+
+    {# The following renders the pagination html #}
+    <div id="pagination">
+        {{ people.render }}
+    </div>
+
+    {% endblock %}
+
 
 Usage
 -----
