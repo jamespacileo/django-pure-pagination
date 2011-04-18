@@ -18,7 +18,7 @@ Add `purepagination` to INSTALLED_APPS
         'pure_pagination',
     )
 
-Substitute `from django.core.paginator import Paginator` with `from purepagination.pagination import Paginator`
+Finally substitute **from django.core.paginator import Paginator** with **from purepagination.pagination import Paginator**
 
 Settings
 --------
