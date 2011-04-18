@@ -1,18 +1,13 @@
+from django.conf import settings
+
 from math import ceil
 import functools
 
 from django.template.loader import render_to_string
 
-from django.conf import settings
 
-PAGINATION_SETTINGS = {
-    'PAGE_RANGE_DISPLAYED': 10,
-    'NUM_PAGES_OUTSIDE_RANGE': 2,
-}
-if hasattr(settings, 'PAGINATION_SETTINGS'):
-    PAGINATOION_SETTINGS.update(settings.PAGINATION_SETTINGS)
-
-#PAGINATION_SETTINGS['PAGE_RANGE_DISPLAYED'] -= 1
+PAGE_RANGE_DISPLAYED = getattr(settings, "PAGE_RANGE_DISPLAYED", 10)
+NUM_PAGES_OUTSIDE_RANGE = getattr(settings, "NUM_PAGES_OUTSIDE_RANGE", 2)
 
 class InvalidPage(Exception):
     pass
@@ -171,22 +166,22 @@ class Page(object):
 
     @add_page_querystring
     def pages(self):
-        if self.paginator.num_pages <= PAGINATION_SETTINGS['PAGE_RANGE_DISPLAYED']:
+        if self.paginator.num_pages <= PAGE_RANGE_DISPLAYED:
             return range(1, self.paginator.num_pages+1)
         result = []
-        left_side = PAGINATION_SETTINGS['PAGE_RANGE_DISPLAYED']/2
-        right_side = PAGINATION_SETTINGS['PAGE_RANGE_DISPLAYED'] - left_side
-        if self.number > self.paginator.num_pages - PAGINATION_SETTINGS['PAGE_RANGE_DISPLAYED']/2:
+        left_side = PAGE_RANGE_DISPLAYED/2
+        right_side = PAGE_RANGE_DISPLAYED - left_side
+        if self.number > self.paginator.num_pages - PAGE_RANGE_DISPLAYED/2:
             right_side = self.paginator.num_pages - self.number
-            left_side = PAGINATION_SETTINGS['PAGE_RANGE_DISPLAYED'] - right_side
-        elif self.number < PAGINATION_SETTINGS['PAGE_RANGE_DISPLAYED']/2:
+            left_side = PAGE_RANGE_DISPLAYED - right_side
+        elif self.number < PAGE_RANGE_DISPLAYED/2:
             left_side = self.number
-            right_side = PAGINATION_SETTINGS['PAGE_RANGE_DISPLAYED'] - left_side
+            right_side = PAGE_RANGE_DISPLAYED - left_side
         for page in xrange(1, self.paginator.num_pages+1):
-            if page <= PAGINATION_SETTINGS['NUM_PAGES_OUTSIDE_RANGE']:
+            if page <= NUM_PAGES_OUTSIDE_RANGE:
                 result.append(page)
                 continue
-            if page >= self.paginator.num_pages - PAGINATION_SETTINGS['NUM_PAGES_OUTSIDE_RANGE']:
+            if page >= self.paginator.num_pages - NUM_PAGES_OUTSIDE_RANGE:
                 result.append(page)
                 continue
             if (page >= self.number - left_side) and (page <= self.number + right_side):
