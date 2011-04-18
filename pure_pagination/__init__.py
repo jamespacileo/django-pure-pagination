@@ -1,0 +1,1 @@
+from paginator import Paginator, EmptyPage, InvalidPage, PageNotAnInteger
