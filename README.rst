@@ -10,6 +10,20 @@ Django-pure-pagination is based upon Django's core pagination module and is ther
 Installation
 ------------
 
+Install package from PYPI:
+
+::
+
+    pip install django-pure-pagination
+
+or clone and install from repository:
+
+::
+
+    git clone git@github.com:jamespacileo/django-pure-pagination.git
+    cd django-pure-pagination
+    python setup.py install
+
 Add `purepagination` to INSTALLED_APPS
 
 ::
