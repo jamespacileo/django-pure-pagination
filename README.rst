@@ -10,7 +10,7 @@ Installation
 
 Add `purepagination` to INSTALLED_APPS
 
-:
+::
 
     INSTALLED_APPS = (
         ...
@@ -28,7 +28,7 @@ Easiest way to render the pagination is to call the render method i.e. `{{ page.
 
 Alternatively you can access the Page object low level methods yourself
 
-:
+::
 
     {% load i18n %}
     <div class="pagination">
