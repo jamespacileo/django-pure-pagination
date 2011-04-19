@@ -60,7 +60,7 @@ A few settings can be set within settings.py
 
     PAGINATION_SETTINGS = {
         'PAGE_RANGE_DISPLAYED': 10,
-        'NUM_PAGES_OUTSIDE_RANGE': 2,
+        'MARGIN_PAGES_DISPLAYED': 2,
     }
 
 **PAGE_RANGE_DISPLAYED** is the number of pages neighbouring the current page which will be displayed (default is 10)

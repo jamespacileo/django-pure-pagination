@@ -5,9 +5,10 @@ import functools
 
 from django.template.loader import render_to_string
 
+PAGINATION_SETTINGS = getattr(settings, "PAGINATION_SETTINGS", {})
 
-PAGE_RANGE_DISPLAYED = getattr(settings, "PAGE_RANGE_DISPLAYED", 10)
-NUM_PAGES_OUTSIDE_RANGE = getattr(settings, "NUM_PAGES_OUTSIDE_RANGE", 2)
+PAGE_RANGE_DISPLAYED = PAGINATION_SETTINGS.get("PAGE_RANGE_DISPLAYED", 10)
+MARGIN_PAGES_DISPLAYED = PAGINATION_SETTINGS.get("MARGIN_PAGES_DISPLAYED", 2)
 
 class InvalidPage(Exception):
     pass
@@ -178,10 +179,10 @@ class Page(object):
             left_side = self.number
             right_side = PAGE_RANGE_DISPLAYED - left_side
         for page in xrange(1, self.paginator.num_pages+1):
-            if page <= NUM_PAGES_OUTSIDE_RANGE:
+            if page <= MARGIN_PAGES_DISPLAYED:
                 result.append(page)
                 continue
-            if page >= self.paginator.num_pages - NUM_PAGES_OUTSIDE_RANGE:
+            if page > self.paginator.num_pages - MARGIN_PAGES_DISPLAYED:
                 result.append(page)
                 continue
             if (page >= self.number - left_side) and (page <= self.number + right_side):
