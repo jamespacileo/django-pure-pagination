@@ -7,6 +7,22 @@ Django-pure-pagination is based upon Django's core pagination module and is ther
 
 `Documentation for Django core pagination module <http://docs.djangoproject.com/en/dev/topics/pagination/>`_
 
+Features
+--------
+
+1. Uses same API as **django.core.pagiantion** and therefore is fully compatible with existing code.
+
+2. Has dynamic query string creation, which takes into consideration existing GET parameters.
+
+3. Out-of-the-box html rendering of the pagination
+
+4. Additional methods make it easier to render more advanced pagination templates.
+
+TODO
+----
+
+1. generic views and class-based view Mixins
+
 Installation
 ------------
 
