@@ -65,7 +65,7 @@ A few settings can be set within settings.py
 
 **PAGE_RANGE_DISPLAYED** is the number of pages neighbouring the current page which will be displayed (default is 10)
 
-**NUM_PAGES_OUTSIDE_RANGE** is the number of pages neighbouring the first and last page which will be displayed (default is 2)
+**MARGIN_PAGES_DISPLAYED** is the number of pages neighbouring the first and last page which will be displayed (default is 2)
 
 Usage example
 -------------
