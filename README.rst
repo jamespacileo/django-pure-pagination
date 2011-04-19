@@ -67,6 +67,8 @@ A few settings can be set within settings.py
 
 **MARGIN_PAGES_DISPLAYED** is the number of pages neighbouring the first and last page which will be displayed (default is 2)
 
+.. image:: http://i.imgur.com/LCqrt.gif
+
 Usage example
 -------------
 
