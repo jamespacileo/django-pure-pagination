@@ -1,7 +1,7 @@
 from datetime import datetime
 from operator import attrgetter
 
-from pure_pagination import Paginator, InvalidPage, EmptyPage
+from pure_pagination.paginator import Paginator, InvalidPage, EmptyPage
 from django.test import TestCase
 from django.test.client import Client
 
