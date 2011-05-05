@@ -1,3 +1,4 @@
+======================
 django-pure-pagination
 ======================
 
@@ -13,6 +14,9 @@ django-pure-pagination
 :Requirements:
     Django 1.2+
 
+
+Introduction
+============
 
 The django app offers advanced pagination features without forcing major code changes within an existing project.
 
