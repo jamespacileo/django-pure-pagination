@@ -1,6 +1,19 @@
 django-pure-pagination
 ======================
 
+:Author:
+    James Pacileo `@ignighted <http://twitter.com/ignighted>`_
+
+:Version:
+    0.1.0
+
+:Description:
+    django-pure-pagination provides advanced pagination features while fully supporting the existing code based on Django's core pagination module.
+
+:Requirements:
+    Django 1.2+
+
+
 The django app offers advanced pagination features without forcing major code changes within an existing project.
 
 Django-pure-pagination is based upon Django's core pagination module and is therefore compatible with the existing api.
