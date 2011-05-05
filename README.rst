@@ -2,6 +2,9 @@
 django-pure-pagination
 ======================
 
+Description
+======================
+
 :Author:
     James Pacileo `@ignighted <http://twitter.com/ignighted>`_
 
