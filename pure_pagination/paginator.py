@@ -121,7 +121,7 @@ class Page(object):
             # Reason: I just want to perform this operation once, and not once per page
             self.base_queryset = self.paginator.request.GET.copy()
             self.base_queryset['page'] = 'page'
-            self.base_queryset = self.base_queryset.urlencode().replace('page=page', 'page=%s')
+            self.base_queryset = self.base_queryset.urlencode().replace('page=page', 'page={0}')
             
         self.number = PageRepresentation(number, self._other_page_querystring(number))
 
@@ -199,10 +199,10 @@ class Page(object):
         GET parameters present.
         """
         if self.paginator.request:
-            return self.base_queryset %page_number
+            return self.base_queryset.format(page_number)
 
         #raise Warning("You must supply Paginator() with the request object for a proper querystring.")
-        return 'page=%s' %page_number
+        return 'page={0}'.format(page_number)
 
     def render(self):
         return render_to_string('pure_pagination/pagination.html', {'current_page':self})
