@@ -17,6 +17,8 @@ Description
 :Requirements:
     Django 1.2+
 
+:Special thanks to:
+    `juandecarrion (Juande Carrion) <https://github.com/juandecarrion>`, `twidi (Stéphane Angel) <https://github.com/twidi>`, `bebraw (Juho Vepsäläinen) <https://github.com/bebraw>`
 
 Introduction
 ============
