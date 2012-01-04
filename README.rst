@@ -21,7 +21,7 @@ Description
 Special Thanks
 ======================
 
-`juandecarrion (Juande Carrion) <https://github.com/juandecarrion>`, `twidi (Stéphane Angel) <https://github.com/twidi>`, `bebraw (Juho Vepsäläinen) <https://github.com/bebraw>`
+`juandecarrion (Juande Carrion) <https://github.com/juandecarrion>`_, `twidi (Stéphane Angel) <https://github.com/twidi>`_, `bebraw (Juho Vepsäläinen) <https://github.com/bebraw>`_
 
 Introduction
 ============
