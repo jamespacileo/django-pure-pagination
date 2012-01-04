@@ -137,4 +137,10 @@ class PaginationTests(TestCase):
         self.assertEqual(42, paginator.count)
         self.assertEqual(5, paginator.num_pages)
         self.assertEqual([1, 2, 3, 4, 5], paginator.page_range)
+
+    def test_pagination_containing_percent_char(self):
+        pass
+
+    def test_mixins(self):
+        pass
     
