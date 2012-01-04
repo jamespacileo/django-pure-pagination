@@ -7,3 +7,6 @@ build**
 dist**
 *.swp
 .DS_Store
+/__init__.py
+/manage.py
+/settings.py
