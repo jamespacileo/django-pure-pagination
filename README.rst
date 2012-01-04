@@ -184,3 +184,12 @@ Alternatively you can access the Page object low level methods yourself
         {% endif %}
     </div>
 
+Generic class-based views
+-------------------------
+
+`Documentation for Django Class-Based Views Class-Based view pagination <https://docs.djangoproject.com/en/dev/ref/class-based-views/`_
+
+
+::
+
+    from pure_pagination import PaginationMixin
