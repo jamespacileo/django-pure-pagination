@@ -33,7 +33,7 @@ Django-pure-pagination is based upon Django's core pagination module and is ther
 Features
 --------
 
-1. Uses same API as **django.core.pagiantion** and therefore is fully compatible with existing code.
+1. Uses same API as **django.core.pagination** and therefore is fully compatible with existing code.
 
 2. Has dynamic query string creation, which takes into consideration existing GET parameters.
 
@@ -41,10 +41,6 @@ Features
 
 4. Additional methods make it easier to render more advanced pagination templates.
 
-TODO
-----
-
-1. generic views and class-based view Mixins
 
 Installation
 ------------
@@ -95,7 +91,7 @@ A few settings can be set within settings.py
 Usage example
 -------------
 
-Following is a simple example
+Following is a simple example for **function based views**. For generic class-based views, see bellow.
 
 view file: **views.py**
 
@@ -184,12 +180,81 @@ Alternatively you can access the Page object low level methods yourself
         {% endif %}
     </div>
 
-Generic class-based views
+Generic Class-Based Views
 -------------------------
 
-`Documentation for Django Class-Based Views Class-Based view pagination <https://docs.djangoproject.com/en/dev/ref/class-based-views/`_
+Documentation for Django generic class-based views on https://docs.djangoproject.com/en/dev/ref/class-based-views/
 
 
-::
+view file:
 
-    from pure_pagination import PaginationMixin
+* **views.py**
+
+    ::
+    
+        # views.py
+        from django.views.generic import ListView
+        
+        from pure_pagination.mixins import PaginationMixin
+        
+        from my_app.models import MyModel
+    
+    
+        class MyModelListView(PaginationMixin, ListView):
+            # Important, this tells the ListView class we are paginating
+            paginate_by = 10 
+            # Replace it for your model or use the queryset attribute instead
+            object = MyModel
+
+template files:
+
+Note that the Django generic-based list view will include the object **page_obj** in the context. More information on https://docs.djangoproject.com/en/dev/ref/generic-views/#list-detail-generic-views
+
+* **_pagination.html**
+
+    ::
+    
+        {% load i18n %}
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a href="?{{ page_obj.previous_page_number.querystring }}" class="prev">&lsaquo;&lsaquo; {% trans "previous" %}</a>
+            {% else %}
+                <span class="disabled prev">&lsaquo;&lsaquo; {% trans "previous" %}</span>
+            {% endif %}
+            {% for page in page_obj.pages %}
+                {% if page %}
+                    {% ifequal page page_obj.number %}
+                        <span class="current page">{{ page }}</span>
+                    {% else %}
+                        <a href="?{{ page.querystring }}" class="page">{{ page }}</a>
+                    {% endifequal %}
+                {% else %}
+                    ...
+                {% endif %}
+            {% endfor %}
+            {% if page_obj.has_next %}
+                <a href="?{{ page_obj.next_page_number.querystring }}" class="next">{% trans "next" %} &rsaquo;&rsaquo;</a>
+            {% else %}
+                <span class="disabled next">{% trans "next" %} &rsaquo;&rsaquo;</span>
+            {% endif %}
+        </div>
+
+*  **my_app/myobject_list.html**
+
+    ::
+    
+        {# my_app/myobject_list.html #}
+        {% extends 'base.html' %}
+    
+        {% block content %}
+    
+        {% for object in object_list %}
+            <div>
+                First name: {{ object.first_name }}
+            </div>
+        {% endfor %}
+    
+        {# The following renders the pagination html #}
+        {% include "_pagination.html" %}
+    
+        {% endblock %}    
