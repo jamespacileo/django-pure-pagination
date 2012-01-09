@@ -153,18 +153,20 @@ Easiest way to render the pagination is to call the render method i.e. **{{ page
 
 Alternatively you can access the Page object low level methods yourself
 
+**Special note:** **page_obj** and **current_page** both point to the page object within the template.
+
 ::
 
     {% load i18n %}
     <div class="pagination">
-        {% if current_page.has_previous %}
-            <a href="?{{ current_page.previous_page_number.querystring }}" class="prev">&lsaquo;&lsaquo; {% trans "previous" %}</a>
+        {% if page_obj.has_previous %}
+            <a href="?{{ page_obj.previous_page_number.querystring }}" class="prev">&lsaquo;&lsaquo; {% trans "previous" %}</a>
         {% else %}
             <span class="disabled prev">&lsaquo;&lsaquo; {% trans "previous" %}</span>
         {% endif %}
-        {% for page in current_page.pages %}
+        {% for page in page_obj.pages %}
             {% if page %}
-                {% ifequal page current_page.number %}
+                {% ifequal page page_obj.number %}
                     <span class="current page">{{ page }}</span>
                 {% else %}
                     <a href="?{{ page.querystring }}" class="page">{{ page }}</a>
@@ -173,8 +175,8 @@ Alternatively you can access the Page object low level methods yourself
                 ...
             {% endif %}
         {% endfor %}
-        {% if current_page.has_next %}
-            <a href="?{{ current_page.next_page_number.querystring }}" class="next">{% trans "next" %} &rsaquo;&rsaquo;</a>
+        {% if page_obj.has_next %}
+            <a href="?{{ page_obj.next_page_number.querystring }}" class="next">{% trans "next" %} &rsaquo;&rsaquo;</a>
         {% else %}
             <span class="disabled next">{% trans "next" %} &rsaquo;&rsaquo;</span>
         {% endif %}
