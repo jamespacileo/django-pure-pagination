@@ -9,7 +9,7 @@ Description
     James Pacileo `@ignighted <http://twitter.com/ignighted>`_
 
 :Version:
-    0.1.0
+    0.2.0
 
 :Description:
     django-pure-pagination provides advanced pagination features and is fully compatible with existing code based on Django's core pagination module. (aka no need to rewrite code!)
