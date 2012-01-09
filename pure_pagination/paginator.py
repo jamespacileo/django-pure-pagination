@@ -205,5 +205,9 @@ class Page(object):
         return 'page=%s' %page_number
 
     def render(self):
-        return render_to_string('pure_pagination/pagination.html', {'current_page':self})
+        return render_to_string('pure_pagination/pagination.html', {
+            'current_page':self,
+            'page_obj':self, # Issue 9 https://github.com/jamespacileo/django-pure-pagination/issues/9
+                             # Use same naming conventions as Django
+            })
 
