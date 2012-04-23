@@ -1,3 +1,4 @@
+from django.core.paginator import InvalidPage, EmptyPage, PageNotAnInteger
 from django.conf import settings
 
 from math import ceil
@@ -9,15 +10,6 @@ PAGINATION_SETTINGS = getattr(settings, "PAGINATION_SETTINGS", {})
 
 PAGE_RANGE_DISPLAYED = PAGINATION_SETTINGS.get("PAGE_RANGE_DISPLAYED", 10)
 MARGIN_PAGES_DISPLAYED = PAGINATION_SETTINGS.get("MARGIN_PAGES_DISPLAYED", 2)
-
-class InvalidPage(Exception):
-    pass
-
-class PageNotAnInteger(InvalidPage):
-    pass
-
-class EmptyPage(InvalidPage):
-    pass
 
 class Paginator(object):
     def __init__(self, object_list, per_page, orphans=0, allow_empty_first_page=True, request=None):
