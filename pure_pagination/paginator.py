@@ -10,6 +10,7 @@ PAGINATION_SETTINGS = getattr(settings, "PAGINATION_SETTINGS", {})
 
 PAGE_RANGE_DISPLAYED = PAGINATION_SETTINGS.get("PAGE_RANGE_DISPLAYED", 10)
 MARGIN_PAGES_DISPLAYED = PAGINATION_SETTINGS.get("MARGIN_PAGES_DISPLAYED", 2)
+SHOW_FIRST_PAGE_WHEN_INVALID = PAGINATION_SETTINGS.get("SHOW_FIRST_PAGE_WHEN_INVALID", False)
 
 class Paginator(object):
     def __init__(self, object_list, per_page, orphans=0, allow_empty_first_page=True, request=None):
@@ -27,10 +28,15 @@ class Paginator(object):
         except ValueError:
             raise PageNotAnInteger('That page number is not an integer')
         if number < 1:
-            raise EmptyPage('That page number is less than 1')
+            if SHOW_FIRST_PAGE_WHEN_INVALID:
+                number = 1
+            else:
+                raise EmptyPage('That page number is less than 1')
         if number > self.num_pages:
             if number == 1 and self.allow_empty_first_page:
                 pass
+            elif SHOW_FIRST_PAGE_WHEN_INVALID:
+                number = 1
             else:
                 raise EmptyPage('That page contains no results')
         return number

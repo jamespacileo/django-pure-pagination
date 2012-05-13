@@ -1,9 +1,8 @@
 from datetime import datetime
-from operator import attrgetter
+from pure_pagination import paginator as pagination_module
 
 from pure_pagination import Paginator, InvalidPage, EmptyPage
 from django.test import TestCase
-from django.test.client import Client
 
 from django.db import models
 
@@ -94,6 +93,13 @@ class PaginationTests(TestCase):
     def test_invalid_page(self):
         paginator = Paginator(Article.objects.all(), 5)
         self.assertRaises(InvalidPage, paginator.page, 7)
+
+    def test_first_page_instead_of_invalid(self):
+        pagination_module.SHOW_FIRST_PAGE_WHEN_INVALID = True
+        paginator = Paginator(Article.objects.all(), 5)
+        p = paginator.page(7)
+        self.assertEqual(u"<Page 1 of 2>", unicode(p))
+        pagination_module.SHOW_FIRST_PAGE_WHEN_INVALID = False
 
     def test_orphans(self):
         # Add a few more records to test out the orphans feature.

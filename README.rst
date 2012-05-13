@@ -59,7 +59,7 @@ or clone and install from repository:
     cd django-pure-pagination
     python setup.py install
 
-Add `purepagination` to INSTALLED_APPS
+Add `pure_pagination` to INSTALLED_APPS
 
 ::
 
@@ -80,11 +80,14 @@ A few settings can be set within settings.py
     PAGINATION_SETTINGS = {
         'PAGE_RANGE_DISPLAYED': 10,
         'MARGIN_PAGES_DISPLAYED': 2,
+        'SHOW_FIRST_PAGE_WHEN_INVALID': True,
     }
 
 **PAGE_RANGE_DISPLAYED** is the number of pages neighbouring the current page which will be displayed (default is 10)
 
 **MARGIN_PAGES_DISPLAYED** is the number of pages neighbouring the first and last page which will be displayed (default is 2)
+
+Set **SHOW_FIRST_PAGE_WHEN_INVALID** to True when you want to just show first page when provided invalid page instead of 404 error
 
 .. image:: http://i.imgur.com/LCqrt.gif
 
