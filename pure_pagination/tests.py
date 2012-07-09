@@ -1,9 +1,12 @@
 from datetime import datetime
 from operator import attrgetter
 
-from pure_pagination import Paginator, InvalidPage, EmptyPage
+from pure_pagination import Paginator, InvalidPage, EmptyPage, PaginationMixin
+
 from django.test import TestCase
-from django.test.client import Client
+from django.test.client import Client, RequestFactory
+from django.views.generic import ListView
+from django.http import Http404
 
 from django.db import models
 
@@ -22,6 +25,11 @@ class LenContainer(object):
     def __len__(self):
         return 42
 
+class ArticleList(PaginationMixin, ListView):
+    paginate_by = 2
+    queryset = Article.objects.all()
+    template_name = "pure_pagination/pagination.html"
+    
 class PaginationTests(TestCase):
     def setUp(self):
         # Prepare a list of objects for pagination.
@@ -142,5 +150,17 @@ class PaginationTests(TestCase):
         pass
 
     def test_mixins(self):
-        pass
-    
+        factory = RequestFactory()
+
+        req = factory.get('/list')
+        resp = ArticleList(request=req, kwargs={}).get(req)
+        self.assertEqual(200, resp.status_code)
+
+        with self.assertRaises(Http404):
+            req = factory.get('/list?page=foo')
+            ArticleList(request=req, kwargs={}).get(req)
+
+        with self.assertRaises(Http404):
+            req = factory.get('/list?page=1000')
+            ArticleList(request=req, kwargs={}).get(req)
+        
