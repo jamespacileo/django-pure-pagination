@@ -37,6 +37,4 @@ def index(request):
 class List(PaginationMixin, ListView):
     template_name = 'list.html'
     paginate_by = 10
-
-    def get_queryset(self):
-        return names
+    queryset = names
