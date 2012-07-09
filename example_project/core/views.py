@@ -3,8 +3,10 @@ from random import randint
 
 from django.http import Http404
 from django.shortcuts import render_to_response
+from django.views.generic import ListView
 
 from pure_pagination.paginator import Paginator
+from pure_pagination.mixins import PaginationMixin
 
 from core.names import names
 
@@ -31,4 +33,10 @@ def index(request):
         'page': page,
     })
 
-    
+
+class List(PaginationMixin, ListView):
+    template_name = 'list.html'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return names
