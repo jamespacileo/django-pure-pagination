@@ -1,4 +1,5 @@
-from pure_pagination.paginator import Paginator
+from pure_pagination.paginator import Paginator, EmptyPage
+from django.http import Http404
 
 class PaginationMixin(object):
     """
