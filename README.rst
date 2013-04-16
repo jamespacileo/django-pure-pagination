@@ -160,7 +160,7 @@ Alternatively you can access the Page object low level methods yourself
     {% load i18n %}
     <div class="pagination">
         {% if page_obj.has_previous %}
-            <a href="?{{ page_obj.previous_page_number.querystring }}" class="prev">&lsaquo;&lsaquo; {% trans "previous" %}</a>
+            <a href="?{{ page_obj.previous_page_number.querystring|safe }}" class="prev">&lsaquo;&lsaquo; {% trans "previous" %}</a>
         {% else %}
             <span class="disabled prev">&lsaquo;&lsaquo; {% trans "previous" %}</span>
         {% endif %}
@@ -169,14 +169,14 @@ Alternatively you can access the Page object low level methods yourself
                 {% ifequal page page_obj.number %}
                     <span class="current page">{{ page }}</span>
                 {% else %}
-                    <a href="?{{ page.querystring }}" class="page">{{ page }}</a>
+                    <a href="?{{ page.querystring|safe }}" class="page">{{ page }}</a>
                 {% endifequal %}
             {% else %}
                 ...
             {% endif %}
         {% endfor %}
         {% if page_obj.has_next %}
-            <a href="?{{ page_obj.next_page_number.querystring }}" class="next">{% trans "next" %} &rsaquo;&rsaquo;</a>
+            <a href="?{{ page_obj.next_page_number.querystring|safe }}" class="next">{% trans "next" %} &rsaquo;&rsaquo;</a>
         {% else %}
             <span class="disabled next">{% trans "next" %} &rsaquo;&rsaquo;</span>
         {% endif %}
@@ -219,7 +219,7 @@ Note that the Django generic-based list view will include the object **page_obj*
         {% load i18n %}
         <div class="pagination">
             {% if page_obj.has_previous %}
-                <a href="?{{ page_obj.previous_page_number.querystring }}" class="prev">&lsaquo;&lsaquo; {% trans "previous" %}</a>
+                <a href="?{{ page_obj.previous_page_number.querystring|safe }}" class="prev">&lsaquo;&lsaquo; {% trans "previous" %}</a>
             {% else %}
                 <span class="disabled prev">&lsaquo;&lsaquo; {% trans "previous" %}</span>
             {% endif %}
@@ -228,14 +228,14 @@ Note that the Django generic-based list view will include the object **page_obj*
                     {% ifequal page page_obj.number %}
                         <span class="current page">{{ page }}</span>
                     {% else %}
-                        <a href="?{{ page.querystring }}" class="page">{{ page }}</a>
+                        <a href="?{{ page.querystring|safe }}" class="page">{{ page }}</a>
                     {% endifequal %}
                 {% else %}
                     ...
                 {% endif %}
             {% endfor %}
             {% if page_obj.has_next %}
-                <a href="?{{ page_obj.next_page_number.querystring }}" class="next">{% trans "next" %} &rsaquo;&rsaquo;</a>
+                <a href="?{{ page_obj.next_page_number.querystring|safe }}" class="next">{% trans "next" %} &rsaquo;&rsaquo;</a>
             {% else %}
                 <span class="disabled next">{% trans "next" %} &rsaquo;&rsaquo;</span>
             {% endif %}
