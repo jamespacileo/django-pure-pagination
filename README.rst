@@ -113,7 +113,7 @@ view file: **views.py**
         objects = ['john', 'edward', 'josh', 'frank']
 
         # Provide Paginator with the request object for complete querystring generation
-        p = Paginator(objects, request=request)
+        p = Paginator(objects, 2, request=request)
         people = p.page(page)
 
         return render_to_response('index.html', {
