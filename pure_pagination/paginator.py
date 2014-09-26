@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.urlresolvers import resolve, reverse
 
 from math import ceil
 import functools
@@ -20,13 +21,15 @@ class EmptyPage(InvalidPage):
     pass
 
 class Paginator(object):
-    def __init__(self, object_list, per_page, orphans=0, allow_empty_first_page=True, request=None):
+    def __init__(self, object_list, per_page, orphans=0,
+                 allow_empty_first_page=True, request=None, urlpage=None):
         self.object_list = object_list
         self.per_page = per_page
         self.orphans = orphans
         self.allow_empty_first_page = allow_empty_first_page
         self._num_pages = self._count = None
         self.request = request
+        self.urlpage = urlpage
 
     def validate_number(self, number):
         "Validates the given 1-based page number."
@@ -87,9 +90,10 @@ class Paginator(object):
 QuerySetPaginator = Paginator # For backwards-compatibility.
 
 class PageRepresentation(int):
-    def __new__(cls, x, querystring):
+    def __new__(cls, x, querystring, pageurl):
         obj = int.__new__(cls, x)
         obj.querystring = querystring
+        obj.pageurl = pageurl
         return obj
 
 
@@ -99,13 +103,16 @@ def add_page_querystring(func):
         result = func(self, *args, **kwargs)
         if isinstance(result, int):
             querystring = self._other_page_querystring(result)
-            return PageRepresentation(result, querystring)
+            pageurl = self._other_page_pageurl(result)
+            return PageRepresentation(result, querystring, pageurl)
         elif isinstance(result, list):
             new_result = []
             for number in result:
                 if isinstance(number, int):
                     querystring = self._other_page_querystring(number)
-                    new_result.append(PageRepresentation(number, querystring))
+                    pageurl = self._other_page_pageurl(number)
+                    new_result.append(PageRepresentation(number, querystring,
+                                                         pageurl))
                 else:
                     new_result.append(number)
             return new_result
@@ -123,7 +130,9 @@ class Page(object):
             self.base_queryset['page'] = 'page'
             self.base_queryset = self.base_queryset.urlencode().replace('%', '%%').replace('page=page', 'page=%s')
 
-        self.number = PageRepresentation(number, self._other_page_querystring(number))
+        self.number = PageRepresentation(number,
+                                         self._other_page_querystring(number),
+                                         self._other_page_pageurl(number))
 
     def __repr__(self):
         return '<Page %s of %s>' % (self.number, self.paginator.num_pages)
@@ -193,6 +202,19 @@ class Page(object):
 
         return result
 
+    def _other_page_pageurl(self, page_number):
+        """
+        Returns a full url for the given page, replacing page parameter
+        """
+        if self.paginator.request:
+            d = resolve(self.paginator.request.path)
+            if 'page' in d.kwargs:
+                d.kwargs['page'] = unicode(page_number)
+                return reverse(d.url_name, kwargs=d.kwargs)
+            return None
+        else:
+            return ""
+
     def _other_page_querystring(self, page_number):
         """
         Returns a query string for the given page, preserving any
@@ -210,4 +232,3 @@ class Page(object):
             'page_obj':self, # Issue 9 https://github.com/jamespacileo/django-pure-pagination/issues/9
                              # Use same naming conventions as Django
             })
-

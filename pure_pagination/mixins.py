@@ -1,4 +1,5 @@
-from pure_pagination.paginator import Paginator
+from pure_pagination.paginator import Paginator, EmptyPage
+from django.http import Http404
 
 class PaginationMixin(object):
     """
@@ -11,3 +12,10 @@ class PaginationMixin(object):
         # Pass the request object to the paginator to keep the parameters in the url querystring ("?page=2&old_param=...")
         request = self.request
         return self.paginator_class(queryset, per_page, orphans=orphans, allow_empty_first_page=allow_empty_first_page, request=request)
+
+    def paginate_queryset(self, *args, **kwargs):
+        # Throw 404 Exception if there is no existing page by default
+        try:
+            return super(PaginationMixin, self).paginate_queryset(*args, **kwargs)
+        except EmptyPage:
+            raise Http404
