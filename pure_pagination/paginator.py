@@ -43,14 +43,14 @@ class Paginator(object):
                 raise EmptyPage('That page contains no results')
         return number
 
-    def page(self, number):
+    def page(self, number, page_param='page'):
         "Returns a Page object for the given 1-based page number."
         number = self.validate_number(number)
         bottom = (number - 1) * self.per_page
         top = bottom + self.per_page
         if top + self.orphans >= self.count:
             top = self.count
-        return Page(self.object_list[bottom:top], number, self)
+        return Page(self.object_list[bottom:top], number, self, page_param)
 
     def _get_count(self):
         "Returns the total number of objects, across all pages."
@@ -114,14 +114,15 @@ def add_page_querystring(func):
     return wrapper
 
 class Page(object):
-    def __init__(self, object_list, number, paginator):
+    def __init__(self, object_list, number, paginator, page_param='page'):
         self.object_list = object_list
         self.paginator = paginator
+        self.page_param = page_param
         if paginator.request:
             # Reason: I just want to perform this operation once, and not once per page
             self.base_queryset = self.paginator.request.GET.copy()
-            self.base_queryset['page'] = 'page'
-            self.base_queryset = self.base_queryset.urlencode().replace('%', '%%').replace('page=page', 'page=%s')
+            self.base_queryset[page_param] = page_param
+            self.base_queryset = self.base_queryset.urlencode().replace('%', '%%').replace('{param}={param}'.format(param=self.page_param), '{param}=%s'.format(param=self.page_param))
 
         self.number = PageRepresentation(number, self._other_page_querystring(number))
 
