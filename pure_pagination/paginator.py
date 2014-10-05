@@ -188,8 +188,9 @@ class Page(object):
             if (page >= self.number - left_side) and (page <= self.number + right_side):
                 result.append(page)
                 continue
-            if result[-1]:
-                result.append(None)
+            if result:
+                if result[-1]:
+                    result.append(None)
 
         return result
 
