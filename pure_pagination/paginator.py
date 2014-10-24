@@ -5,6 +5,8 @@ import functools
 
 from django.template.loader import render_to_string
 
+from .compat import range
+
 PAGINATION_SETTINGS = getattr(settings, "PAGINATION_SETTINGS", {})
 
 PAGE_RANGE_DISPLAYED = PAGINATION_SETTINGS.get("PAGE_RANGE_DISPLAYED", 10)
@@ -81,7 +83,7 @@ class Paginator(object):
         Returns a 1-based range of pages for iterating through within
         a template for loop.
         """
-        return range(1, self.num_pages + 1)
+        return list(range(1, self.num_pages + 1))
     page_range = property(_get_page_range)
 
 QuerySetPaginator = Paginator # For backwards-compatibility.
@@ -168,7 +170,7 @@ class Page(object):
     @add_page_querystring
     def pages(self):
         if self.paginator.num_pages <= PAGE_RANGE_DISPLAYED:
-            return range(1, self.paginator.num_pages+1)
+            return list(range(1, self.paginator.num_pages+1))
         result = []
         left_side = PAGE_RANGE_DISPLAYED/2
         right_side = PAGE_RANGE_DISPLAYED - left_side
@@ -178,7 +180,7 @@ class Page(object):
         elif self.number < PAGE_RANGE_DISPLAYED/2:
             left_side = self.number
             right_side = PAGE_RANGE_DISPLAYED - left_side
-        for page in xrange(1, self.paginator.num_pages+1):
+        for page in range(1, self.paginator.num_pages+1):
             if page <= MARGIN_PAGES_DISPLAYED:
                 result.append(page)
                 continue
