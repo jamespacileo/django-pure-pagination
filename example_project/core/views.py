@@ -4,9 +4,10 @@ from random import randint
 from django.http import Http404
 from django.shortcuts import render_to_response
 
+from pure_pagination.compat import range
 from pure_pagination.paginator import Paginator
 
-from core.names import names
+from .names import names
 
 def index(request):
 
@@ -22,7 +23,7 @@ def index(request):
 
     selected_names = []
     total = len(names)
-    for i in xrange(how_many_names):
+    for i in range(how_many_names):
         selected_names.append(names[randint(0, total-1)])
     p = Paginator(selected_names, page_size, request=request)
 
