@@ -10,6 +10,8 @@ PAGINATION_SETTINGS = getattr(settings, "PAGINATION_SETTINGS", {})
 PAGE_RANGE_DISPLAYED = PAGINATION_SETTINGS.get("PAGE_RANGE_DISPLAYED", 10)
 MARGIN_PAGES_DISPLAYED = PAGINATION_SETTINGS.get("MARGIN_PAGES_DISPLAYED", 2)
 
+DEFAULT_PAGINATION_TEMPLATE = 'pure_pagination/pagination.html'
+
 class InvalidPage(Exception):
     pass
 
@@ -43,14 +45,14 @@ class Paginator(object):
                 raise EmptyPage('That page contains no results')
         return number
 
-    def page(self, number):
+    def page(self, number, template=DEFAULT_PAGINATION_TEMPLATE):
         "Returns a Page object for the given 1-based page number."
         number = self.validate_number(number)
         bottom = (number - 1) * self.per_page
         top = bottom + self.per_page
         if top + self.orphans >= self.count:
             top = self.count
-        return Page(self.object_list[bottom:top], number, self)
+        return Page(self.object_list[bottom:top], number, self, template)
 
     def _get_count(self):
         "Returns the total number of objects, across all pages."
@@ -114,9 +116,10 @@ def add_page_querystring(func):
     return wrapper
 
 class Page(object):
-    def __init__(self, object_list, number, paginator):
+    def __init__(self, object_list, number, paginator, template=DEFAULT_PAGINATION_TEMPLATE):
         self.object_list = object_list
         self.paginator = paginator
+        self.template = template
         if paginator.request:
             # Reason: I just want to perform this operation once, and not once per page
             self.base_queryset = self.paginator.request.GET.copy()
@@ -205,7 +208,7 @@ class Page(object):
         return 'page=%s' %page_number
 
     def render(self):
-        return render_to_string('pure_pagination/pagination.html', {
+        return render_to_string(self.template, {
             'current_page':self,
             'page_obj':self, # Issue 9 https://github.com/jamespacileo/django-pure-pagination/issues/9
                              # Use same naming conventions as Django
