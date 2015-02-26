@@ -2,6 +2,7 @@
 *.pyo
 .idea**
 local**
+!locale/
 build**
 *.egg-info**
 dist**
