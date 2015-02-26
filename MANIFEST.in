@@ -1,2 +1,3 @@
 include LICENSE.txt
 recursive-include pure_pagination/templates *
+recursive-include pure_pagination/locale *
