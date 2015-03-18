@@ -10,26 +10,33 @@ PAGINATION_SETTINGS = getattr(settings, "PAGINATION_SETTINGS", {})
 PAGE_RANGE_DISPLAYED = PAGINATION_SETTINGS.get("PAGE_RANGE_DISPLAYED", 10)
 MARGIN_PAGES_DISPLAYED = PAGINATION_SETTINGS.get("MARGIN_PAGES_DISPLAYED", 2)
 
+
 class InvalidPage(Exception):
     pass
+
 
 class PageNotAnInteger(InvalidPage):
     pass
 
+
 class EmptyPage(InvalidPage):
     pass
 
+
 class Paginator(object):
-    def __init__(self, object_list, per_page, orphans=0, allow_empty_first_page=True, request=None):
+    def __init__(self, object_list, per_page, orphans=0,
+                 allow_empty_first_page=True, request=None,
+                 page_kwarg='page'):
         self.object_list = object_list
         self.per_page = per_page
         self.orphans = orphans
         self.allow_empty_first_page = allow_empty_first_page
         self._num_pages = self._count = None
         self.request = request
+        self.page_kwarg = page_kwarg
 
     def validate_number(self, number):
-        "Validates the given 1-based page number."
+        """Validates the given 1-based page number."""
         try:
             number = int(number)
         except ValueError:
@@ -53,7 +60,7 @@ class Paginator(object):
         return Page(self.object_list[bottom:top], number, self)
 
     def _get_count(self):
-        "Returns the total number of objects, across all pages."
+        """Returns the total number of objects, across all pages."""
         if self._count is None:
             try:
                 self._count = self.object_list.count()
@@ -86,6 +93,7 @@ class Paginator(object):
 
 QuerySetPaginator = Paginator # For backwards-compatibility.
 
+
 class PageRepresentation(int):
     def __new__(cls, x, querystring):
         obj = int.__new__(cls, x)
@@ -113,15 +121,22 @@ def add_page_querystring(func):
 
     return wrapper
 
+
 class Page(object):
     def __init__(self, object_list, number, paginator):
         self.object_list = object_list
         self.paginator = paginator
+        self.page_kwarg = paginator.page_kwarg
+
         if paginator.request:
             # Reason: I just want to perform this operation once, and not once per page
             self.base_queryset = self.paginator.request.GET.copy()
-            self.base_queryset['page'] = 'page'
-            self.base_queryset = self.base_queryset.urlencode().replace('%', '%%').replace('page=page', 'page=%s')
+            self.base_queryset[self.page_kwarg] = self.page_kwarg
+            self.base_queryset = self.base_queryset \
+                                     .urlencode() \
+                                     .replace('%', '%%') \
+                                     .replace('{page}={page}'.format(page=self.page_kwarg),
+                                              '{page}=%s'.format(page=self.page_kwarg))
 
         self.number = PageRepresentation(number, self._other_page_querystring(number))
 
@@ -199,15 +214,15 @@ class Page(object):
         GET parameters present.
         """
         if self.paginator.request:
-            return self.base_queryset %page_number
+            return self.base_queryset % page_number
 
         #raise Warning("You must supply Paginator() with the request object for a proper querystring.")
-        return 'page=%s' %page_number
+        return '{page}={page_number}'.format(page=self.page_kwarg,
+                                             page_number=page_number)
 
     def render(self):
         return render_to_string('pure_pagination/pagination.html', {
-            'current_page':self,
-            'page_obj':self, # Issue 9 https://github.com/jamespacileo/django-pure-pagination/issues/9
-                             # Use same naming conventions as Django
+            'current_page': self,
+            'page_obj': self,  # Issue 9 https://github.com/jamespacileo/django-pure-pagination/issues/9
+                               # Use same naming conventions as Django
             })
-
