@@ -121,6 +121,29 @@ view file: **views.py**
         }
 
 
+or using paginated function
+
+::
+
+    # views.py
+    from django.shortcuts import render_to_response
+
+    from pure_pagination.utils import paginated
+
+
+    def index(request):
+
+        objects = ['john', 'edward', 'josh', 'frank']
+
+        # Returns a paginated page of objects
+        people = paginated(request, objects, 2)
+
+        return render_to_response('index.html', {
+            'people': people,
+        }
+
+
+
 template file: **index.html**
 
 ::
