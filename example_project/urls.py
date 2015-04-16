@@ -16,4 +16,5 @@ urlpatterns = patterns('',
     # url(r'^admin/', include(admin.site.urls)),
 
     url(r'^$', 'core.views.index', name="index"),
+    url(r'^alternative/$', 'core.views.index2', name="index2"),
 )
