@@ -10,6 +10,12 @@ PAGINATION_SETTINGS = getattr(settings, "PAGINATION_SETTINGS", {})
 PAGE_RANGE_DISPLAYED = PAGINATION_SETTINGS.get("PAGE_RANGE_DISPLAYED", 10)
 MARGIN_PAGES_DISPLAYED = PAGINATION_SETTINGS.get("MARGIN_PAGES_DISPLAYED", 2)
 
+# range in Python 3.x is xrange from Python 2.x
+try:
+    xrange
+except NameError:
+    xrange = range
+
 class InvalidPage(Exception):
     pass
 
