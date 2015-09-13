@@ -6,13 +6,15 @@
             {% if page_obj.has_previous %}
                 <li class="previous">
                     <a href="?{{ page_obj.previous_page_number.querystring }}" aria-label="{% trans 'previous page' %}">
-                        <span aria-hidden="true">&laquo;{% if verbose %} {% trans 'previous page' %}{% endif %}</span>
+                        <span aria-hidden="true">&laquo;</span>
+                        {% if verbose %}<span class="hidden-xs">{% trans 'previous page' %}</span>{% endif %}
                     </a>
                 </li>
             {% else %}
                 <li class="previous disabled">
                     <span>
-                        <span aria-hidden="true">&laquo;{% if verbose %} {% trans 'previous page' %}{% endif %}</span>
+                        <span aria-hidden="true">&laquo;</span>
+                        {% if verbose %}<span class="hidden-xs">{% trans 'previous page' %}</span>{% endif %}
                     </span>
                 </li>
             {% endif %}
@@ -38,13 +40,15 @@
             {% if page_obj.has_next %}
                 <li class="next">
                     <a href="?{{ page_obj.next_page_number.querystring }}" aria-label="{% trans 'next page' %}">
-                        <span aria-hidden="true">{% if verbose %}{% trans 'next page' %} {% endif %}&raquo;</span>
+                        {% if verbose %}<span class="hidden-xs">{% trans 'next page' %}</span>{% endif %}
+                        <span aria-hidden="true">&raquo;</span>
                     </a>
                 </li>
             {% else %}
                 <li class="next disabled">
                     <span>
-                        <span aria-hidden="true">{% if verbose %}{% trans 'next page' %} {% endif %}&raquo;</span>
+                        {% if verbose %}<span class="hidden-xs">{% trans 'next page' %}</span>{% endif %}
+                        <span aria-hidden="true">&raquo;</span>
                     </span>
                 </li>
             {% endif %}
