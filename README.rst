@@ -2,6 +2,9 @@
 django-pure-pagination
 ======================
 
+.. image:: https://travis-ci.org/hovel/django-pure-pagination.svg?branch=master
+    :target: https://travis-ci.org/hovel/django-pure-pagination
+
 Description
 ======================
 
