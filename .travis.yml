@@ -9,6 +9,5 @@ env:
   - DJANGO="Django>=1.8,<1.9" DB=sqlite
 install:
   - pip install -U $DJANGO
-  - pip install -U -r pipreq.txt --exists-action=w
 script:
   - python example_project/manage.py test
