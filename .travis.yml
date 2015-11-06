@@ -8,6 +8,7 @@ env:
   - DJANGO="Django>=1.7,<1.8" DB=sqlite
   - DJANGO="Django>=1.8,<1.9" DB=sqlite
 install:
+  - export PYTHONPATH=./pure_pagination/:$PYTHONPATH
   - pip install -U $DJANGO
 script:
   - python example_project/manage.py test
