@@ -1,3 +1,5 @@
+import collections
+
 from django.core.paginator import InvalidPage, EmptyPage, PageNotAnInteger
 from django.conf import settings
 
@@ -11,6 +13,7 @@ PAGINATION_SETTINGS = getattr(settings, "PAGINATION_SETTINGS", {})
 PAGE_RANGE_DISPLAYED = PAGINATION_SETTINGS.get("PAGE_RANGE_DISPLAYED", 10)
 MARGIN_PAGES_DISPLAYED = PAGINATION_SETTINGS.get("MARGIN_PAGES_DISPLAYED", 2)
 SHOW_FIRST_PAGE_WHEN_INVALID = PAGINATION_SETTINGS.get("SHOW_FIRST_PAGE_WHEN_INVALID", False)
+
 
 class Paginator(object):
     def __init__(self, object_list, per_page, orphans=0, allow_empty_first_page=True, request=None):
@@ -82,7 +85,8 @@ class Paginator(object):
         return range(1, self.num_pages + 1)
     page_range = property(_get_page_range)
 
-QuerySetPaginator = Paginator # For backwards-compatibility.
+QuerySetPaginator = Paginator  # For backwards-compatibility.
+
 
 class PageRepresentation(int):
     def __new__(cls, x, querystring):
@@ -98,7 +102,7 @@ def add_page_querystring(func):
         if isinstance(result, int):
             querystring = self._other_page_querystring(result)
             return PageRepresentation(result, querystring)
-        elif isinstance(result, list):
+        elif isinstance(result, collections.Iterable):
             new_result = []
             for number in result:
                 if isinstance(number, int):
@@ -110,6 +114,7 @@ def add_page_querystring(func):
         return result
 
     return wrapper
+
 
 class Page(object):
     def __init__(self, object_list, number, paginator):
@@ -164,17 +169,17 @@ class Page(object):
     @add_page_querystring
     def pages(self):
         if self.paginator.num_pages <= PAGE_RANGE_DISPLAYED:
-            return range(1, self.paginator.num_pages+1)
+            return range(1, self.paginator.num_pages + 1)
         result = []
-        left_side = PAGE_RANGE_DISPLAYED/2
+        left_side = PAGE_RANGE_DISPLAYED / 2
         right_side = PAGE_RANGE_DISPLAYED - left_side
-        if self.number > self.paginator.num_pages - PAGE_RANGE_DISPLAYED/2:
+        if self.number > self.paginator.num_pages - PAGE_RANGE_DISPLAYED / 2:
             right_side = self.paginator.num_pages - self.number
             left_side = PAGE_RANGE_DISPLAYED - right_side
-        elif self.number < PAGE_RANGE_DISPLAYED/2:
+        elif self.number < PAGE_RANGE_DISPLAYED / 2:
             left_side = self.number
             right_side = PAGE_RANGE_DISPLAYED - left_side
-        for page in xrange(1, self.paginator.num_pages+1):
+        for page in range(1, self.paginator.num_pages + 1):
             if page <= MARGIN_PAGES_DISPLAYED:
                 result.append(page)
                 continue
@@ -198,13 +203,12 @@ class Page(object):
             self.base_queryset['page'] = page_number
             return self.base_queryset.urlencode()
 
-        #raise Warning("You must supply Paginator() with the request object for a proper querystring.")
-        return 'page=%s' %page_number
+        # raise Warning("You must supply Paginator() with the request object for a proper querystring.")
+        return 'page=%s' % page_number
 
     def render(self):
         return render_to_string('pure_pagination/pagination.html', {
-            'current_page':self,
-            'page_obj':self, # Issue 9 https://github.com/jamespacileo/django-pure-pagination/issues/9
-                             # Use same naming conventions as Django
-            })
-
+            'current_page': self,
+            'page_obj': self,  # Issue 9 https://github.com/jamespacileo/django-pure-pagination/issues/9
+                               # Use same naming conventions as Django
+        })

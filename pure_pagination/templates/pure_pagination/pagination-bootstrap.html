@@ -23,7 +23,7 @@
                 {% if page %}
                     {% if page == page_obj.number %}
                         <li class="active">
-                            <span>{{ page }} <span class="sr-only">({% trans 'current page' %})</span></span>
+                            <a href="?{{ page.querystring }}">{{ page }} <span class="sr-only">({% trans 'current page' %})</span></a>
                         </li>
                     {% else %}
                         <li>
