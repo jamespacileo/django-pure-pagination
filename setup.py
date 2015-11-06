@@ -8,7 +8,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='django-pure-pagination',
-    version='0.1',
+    version='0.3.0',
     url='https://github.com/jamespacileo/django-pure-pagination/',
     author='James Pacileo',
     author_email='jamespacileo@gmail.com',
