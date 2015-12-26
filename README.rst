@@ -20,8 +20,8 @@ Description
 :Requirements:
     Django 1.7+
 
-:Special_Thanks:
-    `juandecarrion (Juande Carrion) <https://github.com/juandecarrion>`_, `twidi (Stéphane Angel) <https://github.com/twidi>`_, `bebraw (Juho Vepsäläinen) <https://github.com/bebraw>`_
+:Contributors:
+    `juandecarrion (Juande Carrion) <https://github.com/juandecarrion>`_, `twidi (Stéphane Angel) <https://github.com/twidi>`_, `bebraw (Juho Vepsäläinen) <https://github.com/bebraw>`_, `lampslave () <https://github.com/lampslave>`_, `GeyseR (Sergey Fursov) <https://github.com/GeyseR>`_, `zeus (Pavel Zhukov) <https://github.com/zeus>`_
 
 
 Introduction
