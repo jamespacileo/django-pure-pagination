@@ -2,6 +2,9 @@
 django-pure-pagination
 ======================
 
+.. image:: https://travis-ci.org/hovel/django-pure-pagination.svg?branch=master
+    :target: https://travis-ci.org/hovel/django-pure-pagination
+
 Description
 ======================
 
@@ -9,13 +12,13 @@ Description
     James Pacileo `@ignighted <http://twitter.com/ignighted>`_
 
 :Version:
-    0.2.0
+    0.3.0
 
 :Description:
     django-pure-pagination provides advanced pagination features and is fully compatible with existing code based on Django's core pagination module. (aka no need to rewrite code!)
 
 :Requirements:
-    Django 1.2+
+    Django 1.7+
 
 :Special_Thanks:
     `juandecarrion (Juande Carrion) <https://github.com/juandecarrion>`_, `twidi (Stéphane Angel) <https://github.com/twidi>`_, `bebraw (Juho Vepsäläinen) <https://github.com/bebraw>`_
@@ -59,7 +62,7 @@ or clone and install from repository:
     cd django-pure-pagination
     python setup.py install
 
-Add `purepagination` to INSTALLED_APPS
+Add `pure_pagination` to INSTALLED_APPS
 
 ::
 
@@ -80,11 +83,15 @@ A few settings can be set within settings.py
     PAGINATION_SETTINGS = {
         'PAGE_RANGE_DISPLAYED': 10,
         'MARGIN_PAGES_DISPLAYED': 2,
+
+        'SHOW_FIRST_PAGE_WHEN_INVALID': True,
     }
 
 **PAGE_RANGE_DISPLAYED** is the number of pages neighbouring the current page which will be displayed (default is 10)
 
 **MARGIN_PAGES_DISPLAYED** is the number of pages neighbouring the first and last page which will be displayed (default is 2)
+
+Set **SHOW_FIRST_PAGE_WHEN_INVALID** to True when you want to just show first page when provided invalid page instead of 404 error
 
 .. image:: http://i.imgur.com/LCqrt.gif
 
@@ -113,7 +120,9 @@ view file: **views.py**
         objects = ['john', 'edward', 'josh', 'frank']
 
         # Provide Paginator with the request object for complete querystring generation
-        p = Paginator(objects, 2, request=request)
+
+        p = Paginator(objects, request=request)
+
         people = p.page(page)
 
         return render_to_response('index.html', {
@@ -193,18 +202,19 @@ view file:
 * **views.py**
 
     ::
-    
+
         # views.py
         from django.views.generic import ListView
-        
+
         from pure_pagination.mixins import PaginationMixin
-        
+
         from my_app.models import MyModel
-    
-    
+
+
         class MyModelListView(PaginationMixin, ListView):
             # Important, this tells the ListView class we are paginating
-            paginate_by = 10 
+            paginate_by = 10
+
             # Replace it for your model or use the queryset attribute instead
             object = MyModel
 
@@ -215,7 +225,7 @@ Note that the Django generic-based list view will include the object **page_obj*
 * **_pagination.html**
 
     ::
-    
+
         {% load i18n %}
         <div class="pagination">
             {% if page_obj.has_previous %}
@@ -244,19 +254,19 @@ Note that the Django generic-based list view will include the object **page_obj*
 *  **my_app/myobject_list.html**
 
     ::
-    
+
         {# my_app/myobject_list.html #}
         {% extends 'base.html' %}
-    
+
         {% block content %}
-    
+
         {% for object in object_list %}
             <div>
                 First name: {{ object.first_name }}
             </div>
         {% endfor %}
-    
+
         {# The following renders the pagination html #}
         {% include "_pagination.html" %}
-    
-        {% endblock %}    
+
+        {% endblock %}

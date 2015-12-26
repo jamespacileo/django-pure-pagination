@@ -1,2 +1,7 @@
 include LICENSE.txt
+include MANIFEST.in
+include README.rst
 recursive-include pure_pagination/templates *
+recursive-include example_project/example_project/templates *
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
