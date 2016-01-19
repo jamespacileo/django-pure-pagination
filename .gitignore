@@ -62,3 +62,6 @@ target/
 
 *.db
 *.sqlite3
+
+.directory
+dev/
