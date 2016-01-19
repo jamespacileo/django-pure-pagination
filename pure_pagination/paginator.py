@@ -16,16 +16,13 @@ SHOW_FIRST_PAGE_WHEN_INVALID = PAGINATION_SETTINGS.get("SHOW_FIRST_PAGE_WHEN_INV
 
 
 class Paginator(object):
-    def __init__(self, object_list, per_page, orphans=0,
-                 allow_empty_first_page=True, request=None,
-                 page_kwarg='page'):
+    def __init__(self, object_list, per_page, orphans=0, allow_empty_first_page=True, request=None):
         self.object_list = object_list
         self.per_page = per_page
         self.orphans = orphans
         self.allow_empty_first_page = allow_empty_first_page
         self._num_pages = self._count = None
         self.request = request
-        self.page_kwarg = page_kwarg
 
     def validate_number(self, number):
         "Validates the given 1-based page number."
@@ -123,17 +120,11 @@ class Page(object):
     def __init__(self, object_list, number, paginator):
         self.object_list = object_list
         self.paginator = paginator
-        self.page_kwarg = paginator.page_kwarg
-
         if paginator.request:
             # Reason: I just want to perform this operation once, and not once per page
             self.base_queryset = self.paginator.request.GET.copy()
-            self.base_queryset[self.page_kwarg] = self.page_kwarg
-            self.base_queryset = self.base_queryset \
-                                     .urlencode() \
-                                     .replace('%', '%%') \
-                                     .replace('{page}={page}'.format(page=self.page_kwarg),
-                                              '{page}=%s'.format(page=self.page_kwarg))
+            # self.base_queryset['page'] = 'page'
+            # self.base_queryset = self.base_queryset.urlencode().replace('%', '%%').replace('page=page', 'page=%s')
 
         self.number = PageRepresentation(number, self._other_page_querystring(number))
 
@@ -212,15 +203,14 @@ class Page(object):
         """
         if self.paginator.request:
             self.base_queryset['page'] = page_number
-            return self.base_queryset % page_number
+            return self.base_queryset.urlencode()
 
-        #raise Warning("You must supply Paginator() with the request object for a proper querystring.")
-        return '{page}={page_number}'.format(page=self.page_kwarg,
-                                             page_number=page_number)
+        # raise Warning("You must supply Paginator() with the request object for a proper querystring.")
+        return 'page=%s' % page_number
 
     def render(self):
         return render_to_string('pure_pagination/pagination.html', {
             'current_page': self,
             'page_obj': self,  # Issue 9 https://github.com/jamespacileo/django-pure-pagination/issues/9
                                # Use same naming conventions as Django
-            })
+        })
