@@ -1,3 +1,6 @@
+import collections
+
+from django.core.paginator import InvalidPage, EmptyPage, PageNotAnInteger
 from django.conf import settings
 
 from math import ceil
@@ -9,18 +12,7 @@ PAGINATION_SETTINGS = getattr(settings, "PAGINATION_SETTINGS", {})
 
 PAGE_RANGE_DISPLAYED = PAGINATION_SETTINGS.get("PAGE_RANGE_DISPLAYED", 10)
 MARGIN_PAGES_DISPLAYED = PAGINATION_SETTINGS.get("MARGIN_PAGES_DISPLAYED", 2)
-
-
-class InvalidPage(Exception):
-    pass
-
-
-class PageNotAnInteger(InvalidPage):
-    pass
-
-
-class EmptyPage(InvalidPage):
-    pass
+SHOW_FIRST_PAGE_WHEN_INVALID = PAGINATION_SETTINGS.get("SHOW_FIRST_PAGE_WHEN_INVALID", False)
 
 
 class Paginator(object):
@@ -36,16 +28,21 @@ class Paginator(object):
         self.page_kwarg = page_kwarg
 
     def validate_number(self, number):
-        """Validates the given 1-based page number."""
+        "Validates the given 1-based page number."
         try:
             number = int(number)
         except ValueError:
             raise PageNotAnInteger('That page number is not an integer')
         if number < 1:
-            raise EmptyPage('That page number is less than 1')
+            if SHOW_FIRST_PAGE_WHEN_INVALID:
+                number = 1
+            else:
+                raise EmptyPage('That page number is less than 1')
         if number > self.num_pages:
             if number == 1 and self.allow_empty_first_page:
                 pass
+            elif SHOW_FIRST_PAGE_WHEN_INVALID:
+                number = 1
             else:
                 raise EmptyPage('That page contains no results')
         return number
@@ -60,7 +57,7 @@ class Paginator(object):
         return Page(self.object_list[bottom:top], number, self)
 
     def _get_count(self):
-        """Returns the total number of objects, across all pages."""
+        "Returns the total number of objects, across all pages."
         if self._count is None:
             try:
                 self._count = self.object_list.count()
@@ -91,7 +88,7 @@ class Paginator(object):
         return range(1, self.num_pages + 1)
     page_range = property(_get_page_range)
 
-QuerySetPaginator = Paginator # For backwards-compatibility.
+QuerySetPaginator = Paginator  # For backwards-compatibility.
 
 
 class PageRepresentation(int):
@@ -108,7 +105,7 @@ def add_page_querystring(func):
         if isinstance(result, int):
             querystring = self._other_page_querystring(result)
             return PageRepresentation(result, querystring)
-        elif isinstance(result, list):
+        elif isinstance(result, collections.Iterable):
             new_result = []
             for number in result:
                 if isinstance(number, int):
@@ -183,17 +180,17 @@ class Page(object):
     @add_page_querystring
     def pages(self):
         if self.paginator.num_pages <= PAGE_RANGE_DISPLAYED:
-            return range(1, self.paginator.num_pages+1)
+            return range(1, self.paginator.num_pages + 1)
         result = []
-        left_side = PAGE_RANGE_DISPLAYED/2
+        left_side = PAGE_RANGE_DISPLAYED / 2
         right_side = PAGE_RANGE_DISPLAYED - left_side
-        if self.number > self.paginator.num_pages - PAGE_RANGE_DISPLAYED/2:
+        if self.number > self.paginator.num_pages - PAGE_RANGE_DISPLAYED / 2:
             right_side = self.paginator.num_pages - self.number
             left_side = PAGE_RANGE_DISPLAYED - right_side
-        elif self.number < PAGE_RANGE_DISPLAYED/2:
+        elif self.number < PAGE_RANGE_DISPLAYED / 2:
             left_side = self.number
             right_side = PAGE_RANGE_DISPLAYED - left_side
-        for page in xrange(1, self.paginator.num_pages+1):
+        for page in range(1, self.paginator.num_pages + 1):
             if page <= MARGIN_PAGES_DISPLAYED:
                 result.append(page)
                 continue
@@ -214,6 +211,7 @@ class Page(object):
         GET parameters present.
         """
         if self.paginator.request:
+            self.base_queryset['page'] = page_number
             return self.base_queryset % page_number
 
         #raise Warning("You must supply Paginator() with the request object for a proper querystring.")

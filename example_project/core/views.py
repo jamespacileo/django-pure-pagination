@@ -8,8 +8,8 @@ from pure_pagination.paginator import Paginator
 
 from core.names import names
 
-def index(request):
 
+def index(request):
     how_many_names = request.GET.get('how_many_names', 60)
     page_size = request.GET.get('page_size', 10)
     page_num = request.GET.get('page', 1)
@@ -22,13 +22,11 @@ def index(request):
 
     selected_names = []
     total = len(names)
-    for i in xrange(how_many_names):
-        selected_names.append(names[randint(0, total-1)])
+    for i in range(how_many_names):
+        selected_names.append(names[randint(0, total - 1)])
     p = Paginator(selected_names, page_size, request=request)
 
     page = p.page(page_num)
     return render_to_response('index.html', {
         'page': page,
     })
-
-    

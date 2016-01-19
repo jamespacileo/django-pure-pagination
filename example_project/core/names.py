@@ -1,4 +1,4 @@
-names = [
+names = [  # NOQA
 'Aan',
 'Aalia',
 'Aaliah',

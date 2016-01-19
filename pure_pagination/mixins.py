@@ -9,8 +9,7 @@ class PaginationMixin(object):
     paginator_class = Paginator
 
     def get_paginator(self, queryset, per_page, orphans=0, allow_empty_first_page=True):
-        # Pass the request object to the paginator to keep the parameters in
-        #  the url querystring ("?page=2&old_param=...")
+        # Pass the request object to the paginator to keep the parameters in the url querystring ("?page=2&old_param=...")
         request = self.request
         page_kwarg = self.page_kwarg
 
