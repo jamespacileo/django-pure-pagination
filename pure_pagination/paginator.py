@@ -13,6 +13,7 @@ PAGINATION_SETTINGS = getattr(settings, "PAGINATION_SETTINGS", {})
 PAGE_RANGE_DISPLAYED = PAGINATION_SETTINGS.get("PAGE_RANGE_DISPLAYED", 10)
 MARGIN_PAGES_DISPLAYED = PAGINATION_SETTINGS.get("MARGIN_PAGES_DISPLAYED", 2)
 SHOW_FIRST_PAGE_WHEN_INVALID = PAGINATION_SETTINGS.get("SHOW_FIRST_PAGE_WHEN_INVALID", False)
+PAGINATION_TEMPLATE = PAGINATION_SETTINGS.get("TEMPLATE", 'pure_pagination/pagination.html')
 
 
 class Paginator(object):
@@ -209,7 +210,7 @@ class Page(object):
         return 'page=%s' % page_number
 
     def render(self):
-        return render_to_string('pure_pagination/pagination.html', {
+        return render_to_string(PAGINATION_TEMPLATE, {
             'current_page': self,
             'page_obj': self,  # Issue 9 https://github.com/jamespacileo/django-pure-pagination/issues/9
                                # Use same naming conventions as Django

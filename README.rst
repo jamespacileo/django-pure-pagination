@@ -91,6 +91,8 @@ A few settings can be set within settings.py
 
 **MARGIN_PAGES_DISPLAYED** is the number of pages neighbouring the first and last page which will be displayed (default is 2)
 
+**TEMPLATE** is the template that will be used when the pagination is rendered (default is pure_pagination/pagination.html)
+
 Set **SHOW_FIRST_PAGE_WHEN_INVALID** to True when you want to just show first page when provided invalid page instead of 404 error
 
 .. image:: http://i.imgur.com/LCqrt.gif
