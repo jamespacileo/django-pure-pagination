@@ -20,7 +20,7 @@
             height: 10px;
         }
 
-        .page, .prev, .next{
+        .page, .prev, .next, .first, .last{
             display: inline-block;
             padding: 3px 5px;
             border: 1px solid #ddd;
@@ -30,14 +30,14 @@
             background: #eee;
             font-weight: bold;
         }
-        .page:hover, .prev:hover, .next:hover{
+        .page:hover, .prev:hover, .next:hover, .first:hover, .last:hover{
             background: #333;
         }
         .page.current{
             background: #333;
             color: white;
         }
-        .page.disabled, .prev.disabled, .next.disabled{
+        .page.disabled, .prev.disabled, .next.disabled,, .first.disabled, .last.disabled{
             color: #ddd;
             cursor: default;
         }
