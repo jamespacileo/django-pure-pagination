@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-20 18:26+0300\n"
+"POT-Creation-Date: 2016-04-08 15:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,27 +20,53 @@ msgstr ""
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: templates/pure_pagination/pagination-bootstrap.html:8
+#: templates/pure_pagination/pagination-bootstrap.html:23
+#, fuzzy
+#| msgid "current page"
+msgid "first page"
+msgstr "первая страница"
+
 #: templates/pure_pagination/pagination-bootstrap.html:10
-#: templates/pure_pagination/pagination-bootstrap.html:17
+#: templates/pure_pagination/pagination-bootstrap.html:14
+#: templates/pure_pagination/pagination-bootstrap.html:16
+#: templates/pure_pagination/pagination-bootstrap.html:29
 msgid "previous page"
 msgstr "предыдущая страница"
 
-#: templates/pure_pagination/pagination-bootstrap.html:26
+#: templates/pure_pagination/pagination-bootstrap.html:38
 msgid "current page"
 msgstr "текущая страница"
 
-#: templates/pure_pagination/pagination-bootstrap.html:42
-#: templates/pure_pagination/pagination-bootstrap.html:43
-#: templates/pure_pagination/pagination-bootstrap.html:50
+#: templates/pure_pagination/pagination-bootstrap.html:54
+#: templates/pure_pagination/pagination-bootstrap.html:55
+#: templates/pure_pagination/pagination-bootstrap.html:68
 msgid "next page"
 msgstr "следующая страница"
 
+#: templates/pure_pagination/pagination-bootstrap.html:60
+#: templates/pure_pagination/pagination-bootstrap.html:61
+#: templates/pure_pagination/pagination-bootstrap.html:74
+#, fuzzy
+#| msgid "next page"
+msgid "last page"
+msgstr "Последняя страница"
+
 #: templates/pure_pagination/pagination.html:4
-#: templates/pure_pagination/pagination.html:6
+#: templates/pure_pagination/pagination.html:7
+msgid "first"
+msgstr "первая"
+
+#: templates/pure_pagination/pagination.html:5
+#: templates/pure_pagination/pagination.html:8
 msgid "previous"
 msgstr "предыдущая"
 
-#: templates/pure_pagination/pagination.html:20
 #: templates/pure_pagination/pagination.html:22
+#: templates/pure_pagination/pagination.html:25
 msgid "next"
 msgstr "следующая"
+
+#: templates/pure_pagination/pagination.html:23
+#: templates/pure_pagination/pagination.html:26
+msgid "last"
+msgstr "последняя"
