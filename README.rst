@@ -270,3 +270,38 @@ Note that the Django generic-based list view will include the object **page_obj*
         {% include "_pagination.html" %}
 
         {% endblock %}
+        
+        
+Contribute
+----------
+
+Clone repository:
+
+::
+
+    git clone git@github.com:jamespacileo/django-pure-pagination.git
+
+Setup development environment:
+
+::
+
+    cd django-pure-pagination
+    virtualenv env
+    source env/bin/activate
+    pip install Django>=1.8
+
+Add current dir to PYTHONPATH:
+
+::
+
+    export PYTHONPATH=$PWD
+
+This is needed to let example app know where to find pure_pagination library.
+
+Now you can run example app or tests:
+
+::
+
+    python example_project/manage.py runserver
+
+    python example_project/manage.py test

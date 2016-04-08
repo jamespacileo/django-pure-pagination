@@ -148,6 +148,14 @@ class Page(object):
     def previous_page_number(self):
         return self.number - 1
 
+    @add_page_querystring
+    def first_page_number(self):
+        return 1
+
+    @add_page_querystring
+    def last_page_number(self):
+        return self.paginator.num_pages
+
     def start_index(self):
         """
         Returns the 1-based index of the first object on this page,
@@ -191,7 +199,7 @@ class Page(object):
             if (page >= self.number - left_side) and (page <= self.number + right_side):
                 result.append(page)
                 continue
-            if result[-1]:
+            if not result or result[-1]:
                 result.append(None)
 
         return result
