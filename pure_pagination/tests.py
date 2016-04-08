@@ -157,3 +157,28 @@ class PaginationTests(TestCase):
 
     def test_mixins(self):
         pass
+
+    def test_no_margins(self):
+        # remember original value to set it back later
+        margins_displayed = pagination_module.MARGIN_PAGES_DISPLAYED
+
+        pagination_module.MARGIN_PAGES_DISPLAYED = 0
+        paginator = Paginator(range(100), 2)
+
+        # check page in the middle - we should have None on both sides
+        pages = paginator.page(25).pages()
+        self.assertIsNone(pages[0])
+        self.assertIsNone(pages[-1])
+
+        # check first page - we should have None only on the right side
+        pages = paginator.page(1).pages()
+        self.assertIsNotNone(pages[0])
+        self.assertIsNone(pages[-1])
+
+        # check last page - we should have None only on the left side
+        pages = paginator.page(paginator.num_pages).pages()
+        self.assertIsNone(pages[0])
+        self.assertIsNotNone(pages[-1])
+
+        # cleanup - set back original value
+        pagination_module.MARGIN_PAGES_DISPLAYED = margins_displayed
