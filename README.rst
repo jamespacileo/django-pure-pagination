@@ -121,7 +121,7 @@ view file: **views.py**
 
         # Provide Paginator with the request object for complete querystring generation
 
-        p = Paginator(objects, request=request)
+        p = Paginator(objects, request=request, per_page=2)
 
         people = p.page(page)
 
