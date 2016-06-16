@@ -102,11 +102,10 @@ class PaginationTests(TestCase):
         self.assertRaises(InvalidPage, paginator.page, 7)
 
     def test_first_page_instead_of_invalid(self):
-        pagination_module.SHOW_FIRST_PAGE_WHEN_INVALID = True
         paginator = Paginator(Article.objects.all(), 5)
+        paginator.show_first_page_when_invalid = True
         p = paginator.page(7)
         self.assertEqual("<Page 1 of 2>", force_text(p))
-        pagination_module.SHOW_FIRST_PAGE_WHEN_INVALID = False
 
     def test_orphans(self):
         # Add a few more records to test out the orphans feature.
