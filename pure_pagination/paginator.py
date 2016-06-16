@@ -10,10 +10,6 @@ from django.template.loader import render_to_string
 
 PAGINATION_SETTINGS = getattr(settings, "PAGINATION_SETTINGS", {})
 
-PAGE_RANGE_DISPLAYED = PAGINATION_SETTINGS.get("PAGE_RANGE_DISPLAYED", 10)
-MARGIN_PAGES_DISPLAYED = PAGINATION_SETTINGS.get("MARGIN_PAGES_DISPLAYED", 2)
-SHOW_FIRST_PAGE_WHEN_INVALID = PAGINATION_SETTINGS.get("SHOW_FIRST_PAGE_WHEN_INVALID", False)
-
 
 class Paginator(object):
     def __init__(self, object_list, per_page, orphans=0, allow_empty_first_page=True, request=None):
@@ -23,6 +19,9 @@ class Paginator(object):
         self.allow_empty_first_page = allow_empty_first_page
         self._num_pages = self._count = None
         self.request = request
+        self.page_range_displayed = PAGINATION_SETTINGS.get("PAGE_RANGE_DISPLAYED", 10)
+        self.margin_pages_displayed = PAGINATION_SETTINGS.get("MARGIN_PAGES_DISPLAYED", 2)
+        self.show_first_page_when_invalid = PAGINATION_SETTINGS.get("SHOW_FIRST_PAGE_WHEN_INVALID", False)
 
     def validate_number(self, number):
         "Validates the given 1-based page number."
@@ -31,14 +30,14 @@ class Paginator(object):
         except ValueError:
             raise PageNotAnInteger('That page number is not an integer')
         if number < 1:
-            if SHOW_FIRST_PAGE_WHEN_INVALID:
+            if self.show_first_page_when_invalid:
                 number = 1
             else:
                 raise EmptyPage('That page number is less than 1')
         if number > self.num_pages:
             if number == 1 and self.allow_empty_first_page:
                 pass
-            elif SHOW_FIRST_PAGE_WHEN_INVALID:
+            elif self.show_first_page_when_invalid:
                 number = 1
             else:
                 raise EmptyPage('That page contains no results')
@@ -170,22 +169,22 @@ class Page(object):
 
     @add_page_querystring
     def pages(self):
-        if self.paginator.num_pages <= PAGE_RANGE_DISPLAYED:
+        if self.paginator.num_pages <= self.page_range_displayed:
             return range(1, self.paginator.num_pages + 1)
         result = []
-        left_side = PAGE_RANGE_DISPLAYED / 2
-        right_side = PAGE_RANGE_DISPLAYED - left_side
-        if self.number > self.paginator.num_pages - PAGE_RANGE_DISPLAYED / 2:
+        left_side = self.page_range_displayed / 2
+        right_side = self.page_range_displayed - left_side
+        if self.number > self.paginator.num_pages - self.page_range_displayed / 2:
             right_side = self.paginator.num_pages - self.number
-            left_side = PAGE_RANGE_DISPLAYED - right_side
-        elif self.number < PAGE_RANGE_DISPLAYED / 2:
+            left_side = self.page_range_displayed - right_side
+        elif self.number < self.page_range_displayed / 2:
             left_side = self.number
-            right_side = PAGE_RANGE_DISPLAYED - left_side
+            right_side = self.page_range_displayed - left_side
         for page in range(1, self.paginator.num_pages + 1):
-            if page <= MARGIN_PAGES_DISPLAYED:
+            if page <= self.margin_pages_displayed:
                 result.append(page)
                 continue
-            if page > self.paginator.num_pages - MARGIN_PAGES_DISPLAYED:
+            if page > self.paginator.num_pages - self.margin_pages_displayed:
                 result.append(page)
                 continue
             if (page >= self.number - left_side) and (page <= self.number + right_side):
