@@ -214,3 +214,7 @@ class Page(object):
             'page_obj': self,  # Issue 9 https://github.com/jamespacileo/django-pure-pagination/issues/9
                                # Use same naming conventions as Django
         })
+
+    def __iter__(self):
+        for i in self.object_list:
+            yield i
