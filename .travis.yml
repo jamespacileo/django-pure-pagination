@@ -1,17 +1,29 @@
-language: python
+dist: xenial
 sudo: false
+language: python
 python:
   - "2.7"
-  - "3.3"
   - "3.4"
   - "3.5"
+  - "3.6"
+  - "3.7"
 env:
-  - DJANGO="Django>=1.7,<1.8" DB=sqlite
-  - DJANGO="Django>=1.8,<1.9" DB=sqlite
+  - DJANGO="Django>=1.11,<2.0" DB=sqlite
+  - DJANGO="Django>=2.0,<2.1" DB=sqlite
+  - DJANGO="Django>=2.1,<2.2" DB=sqlite
+  - DJANGO="Django>=2.2,<3.0" DB=sqlite
 matrix:
   exclude:
-    - python: "3.5"
-      env: DJANGO="Django>=1.7,<1.8" DB=sqlite
+    - python: "2.7"
+      env: DJANGO="Django>=2.0,<2.1" DB=sqlite
+    - python: "2.7"
+      env: DJANGO="Django>=2.1,<2.2" DB=sqlite
+    - python: "2.7"
+      env: DJANGO="Django>=2.2,<3.0" DB=sqlite
+    - python: "3.4"
+      env: DJANGO="Django>=2.1,<2.2" DB=sqlite
+    - python: "3.4"
+      env: DJANGO="Django>=2.2,<3.0" DB=sqlite
 install:
   - export PYTHONPATH=./pure_pagination/:$PYTHONPATH
   - pip install -U $DJANGO

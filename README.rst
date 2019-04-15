@@ -18,10 +18,10 @@ Description
     django-pure-pagination provides advanced pagination features and is fully compatible with existing code based on Django's core pagination module. (aka no need to rewrite code!)
 
 :Requirements:
-    Django 1.7+
+    Django 1.8+
 
 :Contributors:
-    `juandecarrion (Juande Carrion) <https://github.com/juandecarrion>`_, `twidi (Stéphane Angel) <https://github.com/twidi>`_, `bebraw (Juho Vepsäläinen) <https://github.com/bebraw>`_, `lampslave () <https://github.com/lampslave>`_, `GeyseR (Sergey Fursov) <https://github.com/GeyseR>`_, `zeus (Pavel Zhukov) <https://github.com/zeus>`_
+    `juandecarrion (Juande Carrion) <https://github.com/juandecarrion>`_, `twidi (Stéphane Angel) <https://github.com/twidi>`_, `bebraw (Juho Vepsäläinen) <https://github.com/bebraw>`_, `lampslave (Maksim Iakovlev) <https://github.com/lampslave>`_, `GeyseR (Sergey Fursov) <https://github.com/GeyseR>`_, `zeus (Pavel Zhukov) <https://github.com/zeus>`_
 
 
 Introduction
