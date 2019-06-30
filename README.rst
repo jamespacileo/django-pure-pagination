@@ -108,7 +108,7 @@ view file: **views.py**
     from django.shortcuts import render_to_response
 
     from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
-
+    from ${YOUR_APP}.settings import PAGINATION_SETTINGS
 
     def index(request):
 
@@ -120,8 +120,8 @@ view file: **views.py**
         objects = ['john', 'edward', 'josh', 'frank']
 
         # Provide Paginator with the request object for complete querystring generation
-
-        p = Paginator(objects, request=request)
+        # 2nd Param is required here
+        p = Paginator(objects, PAGINATION_SETTINGS['PAGE_RANGE_DISPLAYED'], request=request)
 
         people = p.page(page)
 
