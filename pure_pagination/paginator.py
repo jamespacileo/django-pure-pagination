@@ -202,7 +202,7 @@ class Page(object):
         GET parameters present.
         """
         if self.paginator.request:
-            self.base_queryset['page'] = page_number
+            self.base_queryset['page'] = str(page_number)
             return self.base_queryset.urlencode()
 
         # raise Warning("You must supply Paginator() with the request object for a proper querystring.")
