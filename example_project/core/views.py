@@ -20,10 +20,8 @@ def index(request):
     except ValueError:
         raise Http404
 
-    selected_names = []
     total = len(names)
-    for i in range(how_many_names):
-        selected_names.append(names[randint(0, total - 1)])
+    selected_names = [names[randint(0, total - 1)] for _ in range(how_many_names)]
     p = Paginator(selected_names, page_size, request=request)
 
     page = p.page(page_num)
