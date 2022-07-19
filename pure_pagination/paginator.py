@@ -129,7 +129,7 @@ class Page(object):
         self.number = PageRepresentation(number, self._other_page_querystring(number))
 
     def __repr__(self):
-        return '<Page %s of %s>' % (self.number, self.paginator.num_pages)
+        return f'<Page {self.number} of {self.paginator.num_pages}>'
 
     def has_next(self):
         return self.number < self.paginator.num_pages
@@ -206,7 +206,7 @@ class Page(object):
             return self.base_queryset.urlencode()
 
         # raise Warning("You must supply Paginator() with the request object for a proper querystring.")
-        return 'page=%s' % page_number
+        return f'page={page_number}'
 
     def render(self):
         return render_to_string('pure_pagination/pagination.html', {
