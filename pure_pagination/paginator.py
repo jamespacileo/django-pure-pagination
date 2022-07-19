@@ -1,4 +1,4 @@
-import collections
+from collections.abs import Iterable
 
 from django.core.paginator import InvalidPage, EmptyPage, PageNotAnInteger
 from django.conf import settings
@@ -102,7 +102,7 @@ def add_page_querystring(func):
         if isinstance(result, int):
             querystring = self._other_page_querystring(result)
             return PageRepresentation(result, querystring)
-        elif isinstance(result, collections.Iterable):
+        elif isinstance(result, Iterable):
             new_result = []
             for number in result:
                 if isinstance(number, int):
