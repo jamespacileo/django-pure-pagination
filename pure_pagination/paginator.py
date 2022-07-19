@@ -1,4 +1,4 @@
-from collections.abs import Iterable
+from collections.abc import Iterable
 
 from django.core.paginator import InvalidPage, EmptyPage, PageNotAnInteger
 from django.conf import settings
